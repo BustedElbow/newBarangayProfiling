@@ -8,12 +8,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
-    @include('layouts.resident-navigation')
+<body class="font-inter">
+  
+    <div class="min-h-screen bg-gray-100 mt-10">
+        @include('layouts.resident-navigation')
 
-    <main>
-        @yield('content')
-    </main>
+        <!-- Page Content -->
+        <main>
+            @yield('content')
+        </main>
+    </div>
 </body>
 
 </html>

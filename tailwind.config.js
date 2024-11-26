@@ -12,8 +12,30 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                inter: ['Inter', 'sans-serif'],
+                raleway: ['Raleway', 'sans-serif'],
             },
+            borderRadius: {
+                'button': '8px',
+            },
+            backgroundImage: {
+                'hero-pattern': "url('/public/images/2.png')",
+                'eagle': "url('/public/images/eagle_mugnanimao.png')",
+            },
+            gridTemplateColumns: {
+                'custom-12': 'repeat(12, 80px)',
+            },
+            backgroundColor: {
+                'barangay-main': "#4169E1",
+            },
+            textColor: {
+                'barangay-main': "#4169E1",
+            },
+            borderColor: {
+                'barangay-main': "#4169E1",
+                'barangay-common': "#1E1E1E",
+            },
+
         },
     },
 

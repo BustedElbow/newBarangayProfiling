@@ -1,17 +1,16 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-[#fefefe] border-b-[1px] border-[#1e1e1e] border-opacity-25 fixed top-0 flex w-full z-50">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="flex justify-between items-center h-16 w-full">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    
-                </div>
-                
+                <a href="">
+                    <img class="h-[40px] w-[40.6px]" src="{{ asset( 'images/barangayEmblem.png')}}" alt="">
+                </a>
             </div>
 
             <!-- Settings Dropdown -->
-             @if(Auth::check())
+            @if(Auth::check())
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -35,7 +34,7 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -44,7 +43,7 @@
                 </x-dropdown>
             </div>
             @else
-            <a class="h-fit border border-black rounded p-1" href="login">Sign In</a>
+            <a class="px-4 py-2 font-inter bg-barangay-main text-white rounded " href="login">Log In</a>
             @endif
 
             <!-- Hamburger -->
@@ -62,7 +61,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            
+
         </div>
 
         <!-- Responsive Settings Options -->
@@ -86,7 +85,7 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                        onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

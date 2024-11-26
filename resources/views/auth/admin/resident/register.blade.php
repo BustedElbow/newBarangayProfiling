@@ -7,24 +7,24 @@
 
     <div class="flex flex-col border-r border-[#1e1e1e] pr-10 gap-8">
         <div class="border-b border-black pb-3">
-            <h2 class="font-inter text-[#4169E1] text-[16px]">Step {{ session('currentStep')}}</h2>
+            <h2 class="font-inter text-[#4169E1] text-[16px]">Step {{$currentStep}}</h2>
             <h1 class="font-bold font-raleway text-[20px]">
-                @if($current_step == 1)
+                @if($currentStep == 1)
                 Personal and Contact Details
-                @elseif($current_step == 2)
+                @elseif($currentStep == 2)
                 Household Information
-                @elseif($current_step == 3)
+                @elseif($currentStep == 3)
                 Employement, Education, and Health Details
-                @elseif($current_step == 4)
+                @elseif($currentStep == 4)
                 Review and Confirmation
                 @endif
             </h1>
         </div>
 
-        <form class="flex flex-col items-end h-full" action="{{ route('register') }}" method="POST">
+        <form class="flex flex-col items-end h-full" action="{{ route('admin.resident.register') }}" method="POST">
             @csrf
             <div class="flex flex-col gap-9">
-                @switch($current_step)
+                @switch($currentStep)
                 @case(1)
                 @include('auth.admin.resident.register_partials.step-1')
                 @break
@@ -38,14 +38,13 @@
                 @case(4)
                 @include('auth.admin.resident.register_partials.step-4')
                 @break
-                @break
                 @endswitch
             </div>
             <div class="flex gap-3 mt-10">
-                @if($current_step > 1)
+                @if($currentStep > 1)
                 <button formaction="{{ route('register') }}" name="previousForm" value="previous" class="bg-gray-300 text-black font-inter w-fit py-2 px-3">Previous</button>
                 @endif
-                <button name="{{ $current_step < 4 ? 'next' : 'submit' }}" class="bg-[#4169E1] text-black font-inter w-fit py-2 px-3">{{ $current_step < 4 ? 'Next' : 'Submit' }}</button>
+                <button name="{{ $currentStep < 4 ? 'next' : 'submit' }}" class="bg-[#4169E1] text-black font-inter w-fit py-2 px-3">{{ $currentStep < 4 ? 'Next' : 'Submit' }}</button>
             </div>
         </form>
     </div>

@@ -19,7 +19,8 @@ Route::middleware(['auth', 'role:official'])->group(function () {
 
         //Residents
         Route::prefix('residents')->group(function () {
-            Route::get('register', [RegisteredResidentController::class, 'create'])->name('register');
+            Route::get('register', [RegisteredResidentController::class, 'create'])->name('admin.resident.register.show');
+            Route::post('register', [RegisteredResidentController::class, 'handleForm'])->name('admin.resident.register');
         });
     });
 });
@@ -48,6 +49,12 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
+
+
+Route::middleware('role:official')->group(function() {
+    
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
@@ -70,3 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
+
+
