@@ -17,8 +17,10 @@
             <h2 class="text-base font-inter uppercase text-barangay-main font-semibold">
                 @if (Request::is('admin'))
                 Dashboard
-                @elseif(Request::is('admin/residents'))
+                @elseif(Request::is('*admin/residents*'))
                 Residents
+                @else
+                Placeholder
                 @endif
             </h2>
             <h1 class="text-3xl font-raleway text-[#1e1e1e] font-bold">
@@ -28,6 +30,8 @@
                 Barangay Residents
                 @elseif (Request::is('admin/residents/register'))
                 Register New Resident
+                @else
+                Placeholder
                 @endif
             </h1>
             <img class="w-[250px] h-[250px] absolute top-[-70px] right-[-45px] opacity-25" src="{{ asset('images/eagle_mugnanimao.png') }}" alt="">
@@ -36,6 +40,7 @@
         @yield('content')
     </main>
 
+    @yield('script')
 </body>
 
 </html>

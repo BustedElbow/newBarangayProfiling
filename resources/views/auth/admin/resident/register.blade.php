@@ -197,7 +197,7 @@
         const residentList = document.getElementById('residentList');
         residentList.innerHTML = '<p>Loading...</p>';
 
-        fetch(`/admin/register/findrelatedresident?search=${search}`)
+        fetch(`/fetchresidents?search=${search}`)
             .then(response => response.json())
             .then(data => {
                 residentList.innerHTML = '';

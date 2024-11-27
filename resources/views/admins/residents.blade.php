@@ -11,7 +11,7 @@
         </div>
             <!-- List of Residents -->
             @foreach ($residents as $resident)
-            <a class="hover:bg-barangay-main hover:text-white" href="">
+            <a class="hover:bg-barangay-main hover:text-white" href="{{ route('admin.resident.profile', [$resident->resident_id]) }}">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <img class="w-[50px] h-[50px] border rounded-full" src="" alt="">

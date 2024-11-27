@@ -15,4 +15,15 @@ class ResidentController extends Controller
 
         return view('admins.residents', compact('residents'));
     }
+
+    public function fetchResidents(Request $request) {
+        $search = $request->input('search', '');
+        $residents = Resident::query()
+            ->where('first_name', 'LIKE', "%{$search}%")
+            ->where('middle_name', 'LIKe', "%{$search}%")
+            ->where('last_name', 'LIKE', "%{$search}%")
+            ->get();
+            
+        return response()->json($residents);
+    }
 }    

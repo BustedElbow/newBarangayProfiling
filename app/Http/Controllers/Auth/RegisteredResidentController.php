@@ -18,18 +18,6 @@ class RegisteredResidentController extends Controller
         return view('auth.admin.resident.register', compact('currentStep'));
     }
 
-    public function fetchResidents(Request $request)
-    {
-        $search = $request->input('search', '');
-        $residents = Resident::query()
-            ->where('first_name', 'LIKE', "%{$search}%")
-            ->orWhere('last_name', 'LIKE', "%{$search}%")
-            ->orWhere('middle_name', 'LIKE', "%{$search}%")
-            ->get();
-
-        return response()->json($residents);
-    }
-
     public function handleForm(Request $request)
     {
         $currentStep = session('current_step', 1);

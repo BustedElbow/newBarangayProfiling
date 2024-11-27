@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\ResidentProfileController;
 use App\Http\Controllers\Auth\RegisteredResidentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -47,8 +48,9 @@ Route::prefix('admin')->group(function () {
         
         Route::get('/residents',[ResidentController::class, 'create'])->name('admin.residents');
         
+        Route::get('/residents/{resident}', [ResidentProfileController::class, 'create'])->name('admin.resident.profile');
     });
 });
-Route::get('/adminfindrelated', [RegisteredResidentController::class, 'fetchResidents']);
+Route::get('/fetchresidents', [ResidentController::class, 'fetchResidents']);
 
 require __DIR__.'/auth.php';
