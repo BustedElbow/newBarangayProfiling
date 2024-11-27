@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\Auth\RegisteredResidentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,10 +44,11 @@ Route::prefix('admin')->group(function () {
         Route::get('',function () {
             return view('admins.dashboard');
         })->name('admin.dashboard');
-
+        
         Route::get('/residents',[ResidentController::class, 'create'])->name('admin.residents');
         
     });
 });
+Route::get('/adminfindrelated', [RegisteredResidentController::class, 'fetchResidents']);
 
 require __DIR__.'/auth.php';

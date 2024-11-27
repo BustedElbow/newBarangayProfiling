@@ -18,6 +18,18 @@ class RegisteredResidentController extends Controller
         return view('auth.admin.resident.register', compact('currentStep'));
     }
 
+    public function fetchResidents(Request $request)
+    {
+        $search = $request->input('search', '');
+        $residents = Resident::query()
+            ->where('first_name', 'LIKE', "%{$search}%")
+            ->orWhere('last_name', 'LIKE', "%{$search}%")
+            ->orWhere('middle_name', 'LIKE', "%{$search}%")
+            ->get();
+
+        return response()->json($residents);
+    }
+
     public function handleForm(Request $request)
     {
         $currentStep = session('current_step', 1);
@@ -117,5 +129,65 @@ class RegisteredResidentController extends Controller
                 'register_data.educational_attainment' => $request->educational_attainment,
             ]);
         }
+    }
+
+    public function store(Request $request)
+    {
+        $residentData = session('register_data');
+
+        // Generate identification number
+        $residentData['identification_number'] = $this->generateIdentificationNumber();
+
+        // Store resident data in the database
+        $resident = Resident::create($residentData);
+
+        //Log::info('Created Resident:', ['resident' => $resident]);
+
+        // Create a user for the resident
+        $this->createUserForResident($resident);
+
+        if (!empty($residentData['family_members'])) {
+            foreach ($residentData['family_members'] as $familyMember) {
+                // If the frontend already provides the resident_id, use it
+                $linkedResidentId = $familyMember['resident_id'] ?? null;
+
+                // Fallback: If not provided, search in the database
+                // if (!$linkedResidentId) {
+                //     $existingResident = Resident::where('first_name', $familyMember['name'])
+                //     ->orWhere('last_name', $familyMember['name'])
+                //     ->first();
+                //     $linkedResidentId = $existingResident ? $existingResident->resident_id : null;
+                // }
+
+                BloodRelation::create([
+                    'related_to_resident_id' => $resident->resident_id, // Current resident's ID
+                    'name' => $familyMember['name'], // Entered family member's name
+                    'relationship' => $familyMember['relationship'], // Provided relationship
+                    'resident_id' => $linkedResidentId, // Use the linked resident_id
+                ]);
+            }
+        }
+
+
+        // Reset session data
+        session()->forget(['register_data', 'currentStep']);
+
+        return redirect()->route('admin.residents');
+    }
+
+    protected function generateIdentificationNumber()
+    {
+        return rand(100000, 999999);
+    }
+
+    protected function createUserForResident($resident)
+    {
+        User::create([
+            'resident_id' => $resident->resident_id,
+            'name' => $resident->first_name .  $resident->middle_name . $resident->last_name,
+            'email' => strtolower($resident->first_name . '.' . $resident->last_name) . '@example.com',
+            'password' => Hash::make('default_password'), // Replace with secure password
+            'role' => 'resident',
+        ]);
     }
 }
