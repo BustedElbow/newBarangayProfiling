@@ -12,5 +12,25 @@ class ResidentProfileController extends Controller
         $resident= Resident::findOrFail($resident);
 
         return view('admins.resident-profile', compact('resident'));
-    }   
+    }
+    
+    public function update(Request $request, Resident $resident) {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'sex' => 'required|string|max:255',
+            'civil_status' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'occupation' => 'required|string|max:255',
+            'employer' => 'required|string|max:255',
+            'educational_attainment' => 'required|string|max:255'
+        ]);
+
+        $resident->update($validated);
+
+        return redirect()->route('admin.resident.profile', $resident->resident_id);
+    }
+
 }

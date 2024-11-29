@@ -3,7 +3,7 @@
 @section('content')
 <div class="p-7 flex h-full">
     <div class=" bg-slate-50 h-full w-full">
-        <a href="{{ route('admin.resident.register.show') }}">Register Resident</a>
+        <a class="px-3 py-2 bg-barangay-main text-white rounded" href="{{ route('admin.resident.register.show') }}">Register Resident</a>
     </div>
     <div class="bg-gray-100 h-full w-full border border-black border-opacity-25 rounded">
         <div class="border-b border-black p-2 w-full">

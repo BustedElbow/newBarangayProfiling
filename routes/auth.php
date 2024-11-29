@@ -17,10 +17,11 @@ Route::middleware(['auth', 'role:official'])->group(function () {
 
     Route::prefix('admin')->group(function() {
 
+        Route::get('register', [RegisteredResidentController::class, 'create'])->name('admin.resident.register.show');
+        Route::post('register', [RegisteredResidentController::class, 'handleForm'])->name('admin.resident.register');
+        
         //Residents
         Route::prefix('residents')->group(function () {
-            Route::get('register', [RegisteredResidentController::class, 'create'])->name('admin.resident.register.show');
-            Route::post('register', [RegisteredResidentController::class, 'handleForm'])->name('admin.resident.register');
         });
     });
 });

@@ -2,10 +2,10 @@
 
 @section('content')
 <!-- parent div for form and steps -->
-<div class="flex flex-row p-10 gap-10 flex-grow">
+<div class="flex flex-row p-10 gap-10 ">
     <!-- parent div for form-->
 
-    <div class="flex flex-col border-r border-[#1e1e1e] pr-10 gap-8">
+    <div class="flex flex-col border-r border-[#1e1e1e] pr-10 gap-8 rounded">
         <div class="border-b border-black pb-3">
             <h2 class="font-inter text-[#4169E1] text-[16px]">Step {{$currentStep}}</h2>
             <h1 class="font-bold font-raleway text-[20px]">
@@ -50,7 +50,7 @@
     </div>
 
     <!-- steps div -->
-    <div class="w-auto h-fit border bg-[#f5f5f5] border-[#1E1E1E] border-opacity-25 flex flex-row py-10 pl-7 pr-9 gap-3 relative overflow-hidden">
+    <div class="w-auto h-fit border bg-[#f5f5f5] border-[#1E1E1E] border-opacity-25 flex flex-row py-10 pl-7 pr-9 gap-3 relative overflow-hidden rounded">
         <!-- Progress section on the left (vertical alignment) -->
         <div class="flex flex-col items-center gap-1">
             <div class="w-8 h-8 bg-blue-500 text-white rounded-full"></div>
