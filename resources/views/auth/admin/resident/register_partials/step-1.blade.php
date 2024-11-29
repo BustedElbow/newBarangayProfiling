@@ -1,11 +1,21 @@
 <div class="flex flex-row justify-between w-full">
     <!-- Image -->
-    <div class="w-[279px] h-[279px] border border-black flex justify-center items-center">
-        <div class="text-center flex flex-col items-center space-y-2 ">
-            <img class="w-[37.5px] h-[37.5px]" src="{{ asset( 'images/icons/image100-black.png')}}" alt="">
-            <label for="file-upload" class="font-inter bg-barangay-main text-white py-2 px-3">Add Image</label>
-            <input id="file-upload" type="file" class="hidden">
-        </div>
+    <div class="max-w-md mx-auto bg-white p-6 border rounded">
+        <h2 class="text-2xl font-semibold mb-4">Upload Your Image</h2>
+
+        <!-- Image Input Form -->
+        <form id="image-form">
+            <label for="image-upload" class="block mb-2 text-gray-700">Choose an Image:</label>
+            <input type="file" id="image-upload" name="image" accept="image/*" class="block mb-4 p-2 border rounded" />
+
+            <!-- Image Preview -->
+            <div id="image-preview" class="hidden">
+                <h3 class="text-lg font-semibold">Image Preview:</h3>
+                <img id="preview" src="" alt="Image preview" class="mt-2 border rounded w-full" />
+            </div>
+
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Submit</button>
+        </form>
     </div>
 
     <div class="flex flex-col gap-2 justify-between">
@@ -57,3 +67,25 @@
         <input class="bg-[#F5F5F5] border-black border-b p-2 font-inter focus:outline-none focus:bg-[#F5F5F5] w-full" type="text" name="nationality" value="{{ old('nationality', session('register_data.nationality')) }}">
     </div>
 </div>
+<script>
+    // JavaScript to handle image preview
+    const fileInput = document.getElementById('image-upload');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImage = document.getElementById('preview');
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Create a URL for the selected image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Set the preview image source to the selected file
+                previewImage.src = e.target.result;
+                imagePreview.classList.remove('hidden'); // Show the preview section
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.classList.add('hidden'); // Hide the preview section if no file is selected
+        }
+    });
+</script>
