@@ -24,6 +24,11 @@ return new class extends Migration
             $table->foreign('resident_id')->references('resident_id')->on('residents');
             $table->foreign('related_to_resident_id')->references('resident_id')->on('residents');
         });
+
+        Schema::table('resident_logs', function(Blueprint $table) {
+            $table->foreign('resident_id')->references('resident_id')->on('residents');
+            $table->foreign('official_id')->references('official_id')->on('officials');
+        });
     }
 
     /**

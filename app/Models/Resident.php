@@ -42,10 +42,10 @@ class Resident extends Model
         return $this->hasOne(User::class, 'resident_id', 'resident_id');
     }
 
-    // public function bloodRelations()
-    // {
-    //     return $this->hasMany(BloodRelation::class, 'resident_id');
-    // }
+    public function bloodRelations()
+    {
+        return $this->hasMany(BloodRelation::class, 'resident_id');
+    }
 
     public function showResidents()
     {

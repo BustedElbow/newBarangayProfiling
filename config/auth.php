@@ -36,6 +36,16 @@ return [
     */
 
     'guards' => [
+        'resident' => [
+            'driver' => 'session',
+            'provider' => 'users'
+        ],
+
+        'official' => [
+            'driver' => 'session',
+            'provider' => 'officials',
+        ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -63,6 +73,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'officials' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Official::class,
+        ],
+
+        'residents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Resident::class,
         ],
 
         // 'users' => [

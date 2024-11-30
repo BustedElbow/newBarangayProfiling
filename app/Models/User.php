@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'resident_id',
         'name',
         'email',
         'password',
@@ -43,4 +44,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class, 'resident_id', 'resident_id');
+    }
 }
