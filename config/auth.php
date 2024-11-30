@@ -43,7 +43,7 @@ return [
 
         'official' => [
             'driver' => 'session',
-            'provider' => 'officials',
+            'provider' => 'users',
         ],
 
         'web' => [

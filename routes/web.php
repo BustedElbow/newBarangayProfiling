@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentProfileController;
 use App\Http\Controllers\OfficialController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Auth\RegisteredResidentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -51,6 +52,8 @@ Route::prefix('admin')->group(function () {
         Route::patch('/residents/{resident}', [ResidentProfileController::class, 'update'])->name('admin.resident.update');
         
         Route::get('/officials', [OfficialController::class, 'create'])->name('admin.officials');
+
+        Route::get('/events', [EventController::class, 'create'])->name('admin.events');
     });
 });
 Route::get('/fetchresidents', [ResidentController::class, 'fetchResidents']);

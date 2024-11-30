@@ -14,6 +14,12 @@
                 <li>
                     <a class="flex pl-5 gap-3 font-inter font-bold text-base py-3 {{ Request::is('*officials*') ? 'text-barangay-main border-barangay-main border-r-4 bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.officials')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*officials*') ? asset('images/icons/resident100-main.png') : asset('images/icons/resident100-black.png') }}" alt="">Officials</a>
                 </li>
+                <li>
+                    <a class="flex pl-5 gap-3 font-inter font-bold text-base py-3 {{ Request::is('*service*') ? 'text-barangay-main border-barangay-main border-r-4 bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.officials')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*service*') ? asset('images/icons/resident100-main.png') : asset('images/icons/resident100-black.png') }}" alt="">Services</a>
+                </li>
+                <li>
+                    <a class="flex pl-5 gap-3 font-inter font-bold text-base py-3 {{ Request::is('*events*') ? 'text-barangay-main border-barangay-main border-r-4 bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.events')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*events*') ? asset('images/icons/resident100-main.png') : asset('images/icons/resident100-black.png') }}" alt="">Events</a>
+                </li>
             </ul>
         </div>
     </div>
