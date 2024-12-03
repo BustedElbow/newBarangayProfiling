@@ -30,6 +30,11 @@
             <input value="{{ session('register_data.birthdate') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
         </div>
         <div class="flex flex-col gap-1">
+            <label for="age" class="font-semibold font-inter">Age</label>
+            <input value="{{ session('register_data.age') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
+        </div>
+
+        <div class="flex flex-col gap-1">
             <label for="CivilStatus" class="font-semibold font-inter">Civil Status</label>
             <input value="{{ session('register_data.civil_status') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
         </div>

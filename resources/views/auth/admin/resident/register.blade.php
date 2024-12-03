@@ -266,10 +266,12 @@
     }
 
     function showUIforNewHousehold() {
+        document.getElementById('household_action').value = 'new'
         document.getElementById('createNewHousehold').classList.remove('hidden')
     }
 
     function hideUIforNewHousehold() {
+        document.getElementById('household_action').value = ""
         document.getElementById('createNewHousehold').classList.add('hidden')
     }
 

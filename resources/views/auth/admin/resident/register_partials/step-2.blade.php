@@ -5,9 +5,11 @@
         </div>
         <button type="button" onclick="addNewFamilyMemberField()" class="font-inter bg-barangay-main py-2 px-3 text-white">Add New Family Member</button>
 
+        <input type="hidden" id="household_action" name="household_action" value="">
+
         <!-- UI for creating a new household -->
         <div id="createNewHousehold" class="flex flex-col hidden">
-            <input type="text" value="{{ session('register_data.last_name') }} Household">
+            <input type="text" name="new_household_name" value="{{ session('register_data.last_name') }} Household">
             <div class="flex gap-2">
                 <span>Current Head: You</span>
                 <span>{{ session('register_data.last_name') }}, {{ session('register_data.first_name') }} {{ session('register_data.middle_name') }}</span>
@@ -34,15 +36,33 @@
 
 <!-- Modal for Connecting Existing Resident -->
 <div id="connectResident" class="z-50 fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <!-- Content -->
-    <div class="bg-white w-1/2 h-1/2 p-4">
-        <h2>Residents</h2>
-        <input id="residentSearchInput" class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none focus:bg-[#F5F5F5]" type="text" placeholder="Search Residents">
-        <button onclick="searchResident()" class="bg-barangay-main text-white p-2 font-inter" type="button">Search</button>
-        <!-- List of Residents -->
-        <div id="residentList" class="border border-black w-full h-1/2">
-
+    <!-- Modal Content -->
+    <div class="bg-white w-1/2 h-1/2 p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-4">Residents</h2>
+        <div class="flex items-center gap-3 mb-4">
+            <input
+                id="residentSearchInput"
+                class="bg-gray-100 border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-barangay-main"
+                type="text"
+                placeholder="Search Residents">
+            <button
+                onclick="searchResident()"
+                class="bg-barangay-main text-white px-4 py-2 rounded hover:bg-barangay-dark transition"
+                type="button">
+                Search
+            </button>
         </div>
-        <button onclick="closeConnectResidentModal()" class="bg-barangay-main text-white p-2 font-inter" type="button">Cancel</button>
+        <!-- List of Residents -->
+        <div id="residentList" class="border border-gray-300 rounded p-4 overflow-y-auto h-1/2">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+        <div class="flex justify-end mt-4">
+            <button
+                onclick="closeConnectResidentModal()"
+                class="bg-barangay-main text-white px-4 py-2 rounded hover:bg-barangay-dark transition"
+                type="button">
+                Cancel
+            </button>
+        </div>
     </div>
 </div>
