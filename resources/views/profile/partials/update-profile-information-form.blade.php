@@ -1,7 +1,12 @@
 <section>
     <!-- parent div -->
     <div>
-        <header class="mb-4 p-9">
+        <!-- banner -->
+        <div class="overflow-hidden h-[53px] w-auto">
+            <img src="{{ asset('../images/profile_banner.png') }}" alt="asd" class="w-full h-[53px] object-cover opacity-100">
+        </div>
+
+        <header class="mb-4 mt-4 pl-9">
             <h2 class="text-lg font-medium text-gray-900">
                 {{ __('Profile Information') }}
             </h2>
@@ -13,10 +18,13 @@
 
         <!-- main content -->
         <div class="flex">
-            <div class="mr-8 ml-9">
+            <div class="absolute w-full h-full right-[10px] top-7">
+                <img src="{{ asset('../images/eagle_mugnanimao.png') }}" alt="Eagle Emblem"
+                    class="w-[300px] h-[300px] absolute opacity-15 right-[-80px] bottom-[-10px] z-0">
+            </div>
+            <div class="mr-8 ml-9 relative">
                 <div class="max-w-md mx-auto bg-white p-6 border rounded">
                     <h2 class="text-2xl font-semibold mb-4">Image dapat naa diri</h2>
-
                     <!-- Image Input Form -->
                     <form id="image-form">
                         <label for="image-upload" class="block mb-2 text-gray-700">Choose an Image:</label>
@@ -25,13 +33,16 @@
                         <!-- Image Preview -->
                         <div id="image-preview" class="hidden">
                             <h3 class="text-lg font-semibold">Image Preview:</h3>
-                            <img id="preview" src="" alt="Image preview" class="mt-2 border rounded w-full" />
+                            <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mt-4">
+                                <img id="preview" src="" alt="Image preview" class="object-cover w-full h-full" />
+                            </div>
                         </div>
-
                         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Submit</button>
                     </form>
                 </div>
             </div>
+
+
 
             <div class="">
                 <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -95,26 +106,4 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript to handle image preview
-        const fileInput = document.getElementById('image-upload');
-        const imagePreview = document.getElementById('image-preview');
-        const previewImage = document.getElementById('preview');
-
-        fileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // Create a URL for the selected image
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Set the preview image source to the selected file
-                    previewImage.src = e.target.result;
-                    imagePreview.classList.remove('hidden'); // Show the preview section
-                };
-                reader.readAsDataURL(file);
-            } else {
-                imagePreview.classList.add('hidden'); // Hide the preview section if no file is selected
-            }
-        });
-    </script>
 </section>
