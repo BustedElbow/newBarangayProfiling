@@ -1,21 +1,28 @@
 <x-app-layout>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-12 gap-5">
+            <!-- Parent div (sidebar) -->
+            <div class="col-start-1 col-span-3">
+                @include('profile.partials.sidebar')
+            </div>
+
+            <!-- Main content -->
+            <div class="col-start-4 col-span-9 flex flex-col mt-32 gap-2">
+                <!-- Profile Information -->
+                <div class="w-full h-[500px] border border-barangay-common border-opacity-25 overflow-hidden relative bg-[#F5F5F5]">
                     @include('profile.partials.update-profile-information-form')
                 </div>
-            </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
+                <!-- Update Password -->
+                <div class="w-full h-[500px] border border-barangay-common border-opacity-25 flex">
                     @include('profile.partials.update-password-form')
                 </div>
-            </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                <!-- Delete Account -->
+                <div class="w-full h-[200px] border border-barangay-common border-opacity-25 flex">
+                    <div class="flex flex-col space-y-4">
+                        @include('profile.partials.delete-user-form')
+                    </div>
                 </div>
             </div>
         </div>
