@@ -25,11 +25,17 @@
 </div>
 
 <!-- Modal For Existing Household -->
-<div id="existingHouseholdModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+<div id="existingHouseholdModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
     <!-- Content -->
     <div class="bg-white w-1/2 h-1/2 p-4">
         <h2>Households</h2>
-
+        <div>
+            <input type="text">
+            <button type="button">Search</button>
+        </div>
+        <div class="border border-black rounded p-2 overflow-y-auto h-1/2">
+            <!-- List of Households -->
+        </div>
         <button onclick="closeExistingHouseholdsModal()" type="button" class="font-inter text-white bg-barangay-main py-2 px-3">Cancel</button>
     </div>
 </div>
