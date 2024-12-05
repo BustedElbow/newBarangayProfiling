@@ -18,4 +18,13 @@ class BloodRelation extends Model
         'relationship',
         'resident_id',
     ];
+
+    public function resident() {
+        return $this->belongsTo(Resident::class, 'resident_id');
+    }
+
+    public function relatedResident() {
+        return $this->belongsTo(Resident::class, 'related_to_resident_id');
+    }
+
 }

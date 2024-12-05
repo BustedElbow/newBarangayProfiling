@@ -4,7 +4,7 @@
         <div class="flex justify-between items-center h-16 w-full">
             <div class="flex">
                 <!-- Logo -->
-                <a href="">
+                <a href="{{ route('resident.home') }}">
                     <img class="h-[40px] w-[40.6px]" src="{{ asset( 'images/barangayEmblem.png')}}" alt="">
                 </a>
             </div>

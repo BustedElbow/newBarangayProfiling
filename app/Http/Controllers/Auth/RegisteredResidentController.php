@@ -18,7 +18,13 @@ class RegisteredResidentController extends Controller
     
     public function create(Request $request){
         $currentStep = session('current_step', 1);
-        return view('auth.admin.resident.register', compact('currentStep'));
+        $householdDetails = null;
+        if (session('register_data.household_action') === 'existing') {
+            $householdId = session('register_data.existing_household_id');
+            $householdDetails = Household::with('members')->find($householdId);
+        }
+
+        return view('auth.admin.resident.register', compact('currentStep', 'householdDetails'));
     }
 
     public function handleForm(Request $request)
@@ -69,7 +75,7 @@ class RegisteredResidentController extends Controller
             $rules = [
                 'household_action' => 'required|string|in:new,existing',
                 'new_household_name' => 'required_if:household_action,new|string|max:255',
-                'existing_household_id' => 'required_if:household_action,existing|exists:households,id',
+                'existing_household_id' => 'required_if:household_action,existing|nullable|exists:households,household_id',
                 'family_members' => 'array',
                 'family_members.*.name' => 'required|string|max:255',
                 'family_members.*.relationship' => 'required|string|max:255',

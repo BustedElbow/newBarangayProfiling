@@ -6,6 +6,7 @@
         <button type="button" onclick="addNewFamilyMemberField()" class="font-inter bg-barangay-main py-2 px-3 text-white">Add New Family Member</button>
 
         <input type="hidden" id="household_action" name="household_action" value="">
+        <input type="hidden" id="existing_household_id" name="existing_household_id">
 
         <!-- UI for creating a new household -->
         <div id="createNewHousehold" class="flex flex-col hidden">
@@ -26,14 +27,18 @@
 
 <!-- Modal For Existing Household -->
 <div id="existingHouseholdModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
-    <!-- Content -->
     <div class="bg-white w-1/2 h-1/2 p-4">
         <h2>Households</h2>
         <div>
-            <input type="text">
-            <button type="button">Search</button>
+            <input
+                id="householdSearchInput"
+                class="bg-gray-100 border border-gray-300 p-2 rounded w-full focus:outline-none"
+                type="text"
+                placeholder="Search Household"
+                onkeyup="searchHousehold()">
+            <button type="button" onclick="searchHousehold()">Search</button>
         </div>
-        <div class="border border-black rounded p-2 overflow-y-auto h-1/2">
+        <div class="border border-black rounded p-2 overflow-y-auto h-1/2" id="householdList">
             <!-- List of Households -->
         </div>
         <button onclick="closeExistingHouseholdsModal()" type="button" class="font-inter text-white bg-barangay-main py-2 px-3">Cancel</button>
@@ -72,3 +77,60 @@
         </div>
     </div>
 </div>
+
+<script>
+    function loadHouseholds(search = '') {
+        const householdList = document.getElementById('householdList');
+        householdList.innerHTML = '<p>Loading...</p>';
+
+        fetch(`/fetchhouseholds?search=${search}`)
+            .then(response => response.json())
+            .then(data => {
+                householdList.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(household => {
+                        const householdDiv = document.createElement('div');
+                        householdDiv.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
+
+                        const householdInfo = document.createElement('span');
+                        const head = household.members[0]?.resident;
+                        const headName = head ? `${head.first_name} ${head.last_name}` : 'No Head Assigned';
+                        householdInfo.textContent = `${household.household_name} (Head: ${headName})`;
+
+                        const joinButton = document.createElement('button');
+                        joinButton.type = 'button';
+                        joinButton.textContent = 'Join';
+                        joinButton.classList.add('bg-barangay-main', 'text-white', 'px-4', 'py-2', 'rounded');
+                        joinButton.onclick = () => {
+                            joinHousehold(household.household_id);
+                        };
+
+                        householdDiv.appendChild(householdInfo);
+                        householdDiv.appendChild(joinButton);
+
+                        householdList.appendChild(householdDiv);
+                    });
+                } else {
+                    householdList.innerHTML = '<p>No households found.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching households:', error);
+                householdList.innerHTML = '<p>Error loading households.</p>';
+            });
+    }
+
+    function searchHousehold() {
+        const searchInput = document.getElementById('householdSearchInput').value;
+        loadHouseholds(searchInput);
+    }
+
+    function joinHousehold(householdId) {
+        // Assign the selected household ID to a hidden input for form submission
+        document.getElementById('household_action').value = 'existing';
+        document.getElementById('existing_household_id').value = householdId;
+
+        // Close the modal
+        closeExistingHouseholdsModal();
+    }
+</script>

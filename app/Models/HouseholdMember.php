@@ -20,6 +20,6 @@ class HouseholdMember extends Model
     }
 
     public function household() {
-        return $this->belongsTo(Household::class);
+        return $this->belongsTo(Household::class, 'household_id', 'household_id');
     }
 }
