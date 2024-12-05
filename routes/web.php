@@ -43,7 +43,7 @@ Route::prefix('admin')->group(function () {
     //Protected Routes
     Route::middleware(['auth', 'role:official'])->group( function () {
 
-        Route::get('',function () {
+        Route::get('/dashboard',function () {
             return view('admins.dashboard');
         })->name('admin.dashboard');
         
@@ -63,6 +63,7 @@ Route::prefix('admin')->group(function () {
 
         Route::put('/resident/{relation}/edit-relationship', [ResidentProfileController::class, 'editRelationship'])->name('admin.resident.editRelationship');
         Route::delete('/resident/{relation}/delete-relatinship', [ResidentProfileController::class, 'deleteRelationship'])->name('admin.resident.deleteRelationship');
+        Route::post('/resident/{resident}/add-relationship', [ResidentProfileController::class, 'storeRelationship'])->name('admin.resident.addRelationship');
     });
 });
 

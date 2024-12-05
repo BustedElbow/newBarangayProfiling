@@ -48,4 +48,19 @@ class ResidentProfileController extends Controller
         $relation->delete();
         return redirect()->back()->with('success', 'Relationship deleted successfully.');
     }
+
+    public function storeRelationship(Request $request, $residentId) {
+        $request->validate([
+            'related_to_resident_id' => 'required|exists:residents, resident_id',
+            'relationship' => 'required|string|max:255'
+        ]);
+
+        BloodRelation::create([
+            'resident_id' => $residentId,
+            'related_to_resident_id' => $request->input('related_to_resident_id'),
+            'relationship' => $request->input('relationship'),
+        ]); 
+
+        return redirect()->back()->with('success', 'Relationship added successfully');
+    }
 }

@@ -108,7 +108,6 @@
         let age = today.getFullYear() - birthDate.getFullYear();
         const m = today.getMonth() - birthDate.getMonth();
 
-        // Adjust age if the birthday hasn't occurred yet this year
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
@@ -234,7 +233,6 @@
 
     function connectResidentToFamilyMember(resident) {
         if (currentFamilyMemberIndex !== null) {
-            // Update the family member's resident ID and name
             const residentIdInput = document.querySelector(
                 `input[name="family_members[${currentFamilyMemberIndex}][resident_id]"]`
             );
@@ -243,11 +241,10 @@
             );
 
             if (residentIdInput && nameInput) {
-                residentIdInput.value = resident.resident_id; // Set the resident's ID
-                nameInput.value = `${resident.first_name} ${resident.last_name}`; // Set the full name
+                residentIdInput.value = resident.resident_id; 
+                nameInput.value = `${resident.first_name} ${resident.last_name}`; 
             }
 
-            // Close the modal after selecting the resident
             closeConnectResidentModal();
         }
     }
