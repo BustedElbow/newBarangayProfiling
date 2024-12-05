@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Resident;
+use App\Models\BloodRelation;
 
 class ResidentProfileController extends Controller
 {
     public function create($resident): View {
-        $resident= Resident::findOrFail($resident);
+        $resident = Resident::with(['relatedTo.Resident', 'householdMember.household.members.resident'])->findOrFail($resident);
 
         return view('admins.resident-profile', compact('resident'));
     }
@@ -33,4 +34,18 @@ class ResidentProfileController extends Controller
         return redirect()->route('admin.resident.profile', $resident->resident_id);
     }
 
+
+    public function editRelationship(Request $request, $relation)
+    {
+        $relation = BloodRelation::findOrFail($relation);
+        $relation->update($request->only('relationship'));
+        return redirect()->back()->with('success', 'Relationship updated successfully.');
+    }
+
+    public function deleteRelationship($relation)
+    {
+        $relation = BloodRelation::findOrFail($relation);
+        $relation->delete();
+        return redirect()->back()->with('success', 'Relationship deleted successfully.');
+    }
 }

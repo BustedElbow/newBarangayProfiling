@@ -8,8 +8,25 @@
                 <li>
                     <a class="flex pl-5 gap-3 font-inter font-bold text-base py-3 {{ Request::is('admin') ? 'text-barangay-main border-barangay-main border-r-4 bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.dashboard') }}"><img class="w-[24px] h-[24px]" src="{{ Request::is('admin') ? asset('images/icons/dashboard100-main.png') : asset('images/icons/dashboard100-black.png') }}" alt="">Dashboard</a>
                 </li>
-                <li>
-                    <a class="flex pl-5 gap-3 font-inter font-bold text-base py-3 {{ Request::is('*residents*') ? 'text-barangay-main border-barangay-main border-r-4 bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.residents')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*residents*') ? asset('images/icons/resident100-main.png') : asset('images/icons/resident100-black.png') }}" alt="">Residents</a>
+                <li class="relative">
+                    <button onclick="toggleAccordion()" class="flex justify-between w-full pl-5 pr-3 font-inter font-bold text-base py-3 text-[#1e1e1e]">
+                        Residents
+                        <img id="accordion-icon" class="w-4 h-4" src="{{ asset('images/icons/chevron-down.svg') }}" alt="Expand Icon">
+                    </button>
+                    <ul id="accordion-section" class="hidden flex flex-col gap-3 pl-8">
+                        <li>
+                            <a class="flex gap-3 text-sm py-2 {{ Request::is('*residents*') ? 'text-barangay-main' : 'text-[#1e1e1e]'}}" href="{{ route('admin.residents') }}">
+                                <img class="w-[16px] h-[16px]" src="{{ Request::is('*residents*') ? asset('images/icons/resident100-main.png') : asset('images/icons/resident100-black.png') }}" alt="">
+                                All Residents
+                            </a>
+                        </li>
+                        <li>
+                            <a class="flex gap-3 text-sm py-2 {{ Request::is('*households*') ? 'text-barangay-main' : 'text-[#1e1e1e]'}}" href="{{ route('admin.households') }}">
+                                <img class="w-[16px] h-[16px]" src="{{ Request::is('*households*') ? asset('images/icons/household-main.png') : asset('images/icons/household-black.png') }}" alt="">
+                                Households
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a class="flex pl-5 gap-3 font-inter font-bold text-base py-3 {{ Request::is('*officials*') ? 'text-barangay-main border-barangay-main border-r-4 bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.officials')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*officials*') ? asset('images/icons/resident100-main.png') : asset('images/icons/resident100-black.png') }}" alt="">Officials</a>
@@ -47,5 +64,16 @@
     function toggleDropdown() {
         const dropdown = document.getElementById('dropdown-menu')
         dropdown.classList.toggle('hidden')
+    }
+
+    function toggleAccordion() {
+        const section = document.getElementById('accordion-section');
+        const icon = document.getElementById('accordion-icon');
+
+        // Toggle visibility of the section
+        section.classList.toggle('hidden');
+
+        // Change icon direction based on visibility
+        
     }
 </script>

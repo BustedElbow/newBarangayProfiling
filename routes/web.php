@@ -7,6 +7,7 @@ use App\Http\Controllers\ResidentProfileController;
 use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\HouseHoldController;
 use App\Http\Controllers\Auth\RegisteredResidentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -51,14 +52,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/residents/{resident}', [ResidentProfileController::class, 'create'])->name('admin.resident.profile');
 
         Route::patch('/residents/{resident}', [ResidentProfileController::class, 'update'])->name('admin.resident.update');
+
+        Route::get('/households', [HouseHoldController::class, 'create'])->name('admin.households');
         
         Route::get('/officials', [OfficialController::class, 'create'])->name('admin.officials');
 
         Route::get('/events', [EventController::class, 'create'])->name('admin.events');
 
         Route::get('/services', [ServicesController::class, 'create'])->name('admin.services');
+
+        Route::put('/resident/{relation}/edit-relationship', [ResidentProfileController::class, 'editRelationship'])->name('admin.resident.editRelationship');
+        Route::delete('/resident/{relation}/delete-relatinship', [ResidentProfileController::class, 'deleteRelationship'])->name('admin.resident.deleteRelationship');
     });
 });
+
 Route::get('/fetchresidents', [ResidentController::class, 'fetchResidents']);
+Route::get('/fetchhouseholds', [HouseHoldController::class, 'fetchHouseholds']);
 
 require __DIR__.'/auth.php';

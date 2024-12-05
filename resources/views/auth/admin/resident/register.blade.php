@@ -267,6 +267,7 @@
 
     function showUIforNewHousehold() {
         document.getElementById('household_action').value = 'new'
+        document.getElementById('existing_household_id').value = null
         document.getElementById('createNewHousehold').classList.remove('hidden')
     }
 
