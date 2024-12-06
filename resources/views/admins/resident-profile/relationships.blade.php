@@ -7,15 +7,20 @@
     </div>
 
     <div id="relationships-content" class="px-4 pb-4 hidden">
-        <button
-            onclick="addNewRelationshipField()"
-            class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Add New Relationship
-        </button>
+        <form id="relationshipForm" action="{{ route('admin.resident.storeRelationship', $resident->resident_id) }}" method="POST">
+            @csrf
+            <button type="button" onclick="addNewRelationshipField()" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                Add New Relationship
+            </button>
 
-        <div id="familyMember" class="space-y-4 mb-4">
-            <!-- Dynamic fields will be added here -->
-        </div>
+            <div id="familyMember" class="space-y-4 mb-4">
+                <!-- Dynamic fields added here -->
+            </div>
+
+            <button type="submit" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700">
+                Save All Relationships
+            </button>
+        </form>
 
         @if($resident->relatedTo->count() > 0)
         <div class="overflow-x-auto">
@@ -31,8 +36,12 @@
                     @foreach($resident->relatedTo as $relation)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            @if($relation->resident)
                             {{ $relation->resident->first_name }}
                             {{ $relation->resident->last_name }}
+                            @else
+                            {{ $relation->name }}
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <form action="{{ route('admin.resident.editRelationship', ['relation' => $relation->blood_relation_id]) }}" method="POST">
@@ -108,12 +117,12 @@
             <input type="text" 
                 name="relationships[${familyMemberCounter}][name]" 
                 class="bg-[#f5f5f5] border-gray-300 rounded-md p-2 w-full" 
-                placeholder="Resident name" 
-                readonly>
+                placeholder="Resident name">
             <input type="text" 
                 name="relationships[${familyMemberCounter}][relationship]" 
                 class="bg-[#f5f5f5] border-gray-300 rounded-md p-2 w-full" 
-                placeholder="Relationship">
+                placeholder="Relationship" 
+                required>
         </div>
         <button type="button" 
             onclick="openConnectResidentModal(${familyMemberCounter})" 

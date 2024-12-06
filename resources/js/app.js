@@ -1,8 +1,6 @@
 import "./bootstrap";
 
-import "./household";
 
-import "./resident"
 
 import Alpine from "alpinejs";
 

@@ -63,7 +63,8 @@ Route::prefix('admin')->group(function () {
 
         Route::put('/resident/{relation}/edit-relationship', [ResidentProfileController::class, 'editRelationship'])->name('admin.resident.editRelationship');
         Route::delete('/resident/{relation}/delete-relatinship', [ResidentProfileController::class, 'deleteRelationship'])->name('admin.resident.deleteRelationship');
-        Route::post('/resident/{resident}/add-relationship', [ResidentProfileController::class, 'storeRelationship'])->name('admin.resident.addRelationship');
+        Route::post('/admin/resident/{resident}/relationships', [ResidentProfileController::class, 'storeRelationship'])
+        ->name('admin.resident.storeRelationship');
     });
 });
 
