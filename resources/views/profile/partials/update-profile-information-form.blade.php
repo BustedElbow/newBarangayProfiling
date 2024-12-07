@@ -5,47 +5,18 @@
         <div class="overflow-hidden h-[53px] w-auto">
             <img src="{{ asset('../images/profile_banner.png') }}" alt="asd" class="w-full h-[53px] object-cover opacity-100">
         </div>
-
-        <header class="mb-4 mt-4 pl-9">
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Profile Information') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __("Update your account's profile information and email address.") }}
-            </p>
-        </header>
-
-        <!-- main content -->
         <div class="flex">
-            <div class="absolute w-full h-full right-[10px] top-7">
-                <img src="{{ asset('../images/eagle_mugnanimao.png') }}" alt="Eagle Emblem"
-                    class="w-[300px] h-[300px] absolute opacity-15 right-[-80px] bottom-[-10px] z-0">
-            </div>
-            <div class="mr-8 ml-9 relative">
-                <div class="max-w-md mx-auto bg-white p-6 border rounded">
-                    <h2 class="text-2xl font-semibold mb-4">Image dapat naa diri</h2>
-                    <!-- Image Input Form -->
-                    <form id="image-form">
-                        <label for="image-upload" class="block mb-2 text-gray-700">Choose an Image:</label>
-                        <input type="file" id="image-upload" name="image" accept="image/*" class="block mb-4 p-2 border rounded" />
+            <header class="mb-4 mt-4 pl-9 mr-[60px]">
+                <h2 class="text-[24px] font-raleway text-[#4169E1] font-bold ">
+                    {{ __('Profile Information') }}
+                </h2>
 
-                        <!-- Image Preview -->
-                        <div id="image-preview" class="hidden">
-                            <h3 class="text-lg font-semibold">Image Preview:</h3>
-                            <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mt-4">
-                                <img id="preview" src="" alt="Image preview" class="object-cover w-full h-full" />
-                            </div>
-                        </div>
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Submit</button>
-                    </form>
-                </div>
-            </div>
-
-
-
-            <div class="">
-                <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+                <p class="mt-1 text-sm text-gray-600 font-inter text-[16px]">
+                    {{ __("Update your account's profile information and email address.") }}
+                </p>
+            </header>
+            <div>
+                <form id="send-verification" method="post" action="{{ route('verification.send') }}" class="mt-8">
                     @csrf
                 </form>
 
@@ -103,7 +74,18 @@
                     </div>
                 </form>
             </div>
+
+
+            <!-- main content -->
+            <div class="flex">
+                <div class="absolute w-full h-full right-[10px] top-7">
+                    <img src="{{ asset('../images/eagle_mugnanimao.png') }}" alt="Eagle Emblem"
+                        class="w-[300px] h-[300px] absolute opacity-15 right-[-80px] bottom-[-10px] z-0 pointer-events-none">
+                </div>
+                <div class="relative z-10">
+
+                </div>
+            </div>
         </div>
-    </div>
 
 </section>

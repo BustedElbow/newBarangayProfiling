@@ -1,7 +1,7 @@
 <section>
-    <div class="p-9 flex justify-center">
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">
+    <div class="p-9 flex justify-center align-middle">
+        <header class="mt-[41px] mr-[56px]">
+            <h2 class="text-[24px] font-raleway text-[#4169E1] font-bold ">
                 {{ __('Update Password') }}
             </h2>
 

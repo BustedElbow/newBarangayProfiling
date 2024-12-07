@@ -1,7 +1,7 @@
 <section class="space-y-6">
     <div class="p-9 ">
         <header>
-            <h2 class="text-lg font-medium text-gray-900">
+            <h2 class="text-[24px] font-raleway text-[#4169E1] font-bold ">
                 {{ __('Delete Account') }}
             </h2>
 
