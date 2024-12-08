@@ -38,8 +38,16 @@ class ResidentProfileController extends Controller
     public function editRelationship(Request $request, $relation)
     {
         $relation = BloodRelation::findOrFail($relation);
-        $relation->update($request->only('relationship'));
-        return redirect()->back()->with('success', 'Relationship updated successfully.');
+
+        $validated = $request->validate([
+            'relationship' => 'required|string|max:255'
+        ]);
+
+        $relation->update([
+            'relationship' => $validated['relationship']
+        ]);
+
+        return redirect()->back()->with('success', 'Relationship edited successfully.');
     }
 
     public function deleteRelationship($relation)
