@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Resident;
 use App\Models\BloodRelation;
+use App\Models\HouseholdMember;
+use Illuminate\Support\Facades\Log;
 
 class ResidentProfileController extends Controller
 {
@@ -38,8 +40,16 @@ class ResidentProfileController extends Controller
     public function editRelationship(Request $request, $relation)
     {
         $relation = BloodRelation::findOrFail($relation);
-        $relation->update($request->only('relationship'));
-        return redirect()->back()->with('success', 'Relationship updated successfully.');
+
+        $validated = $request->validate([
+            'relationship' => 'required|string|max:255'
+        ]);
+
+        $relation->update([
+            'relationship' => $validated['relationship']
+        ]);
+
+        return redirect()->back()->with('success', 'Relationship edited successfully.');
     }
 
     public function deleteRelationship($relation)
@@ -49,18 +59,87 @@ class ResidentProfileController extends Controller
         return redirect()->back()->with('success', 'Relationship deleted successfully.');
     }
 
-    public function storeRelationship(Request $request, $residentId) {
+    public function storeRelationship(Request $request, $residentId)
+    {
         $request->validate([
-            'related_to_resident_id' => 'required|exists:residents, resident_id',
-            'relationship' => 'required|string|max:255'
+            'relationships' => 'required|array',
+            'relationships.*.resident_id' => 'nullable|exists:residents,resident_id',
+            'relationships.*.name' => 'required|string|max:255',
+            'relationships.*.relationship' => 'required|string|max:255'
         ]);
 
-        BloodRelation::create([
-            'resident_id' => $residentId,
-            'related_to_resident_id' => $request->input('related_to_resident_id'),
-            'relationship' => $request->input('relationship'),
-        ]); 
+        foreach ($request->relationships as $relationship) {
+            BloodRelation::create([
+                'resident_id' => $relationship['resident_id'],
+                'related_to_resident_id' => $residentId,
+                'name' => $relationship['name'],
+                'relationship' => $relationship['relationship']
+            ]);
+        }
 
-        return redirect()->back()->with('success', 'Relationship added successfully');
+        return redirect()->back()->with('success', 'Relationships added successfully');
+    }
+
+    public function updateHousehold(Request $request, Resident $resident)
+    {
+        try {
+            $request->validate([
+                'household_id' => 'required|exists:households,household_id',
+            ]);
+
+            $householdMember = HouseholdMember::updateOrCreate(
+                ['resident_id' => $resident->resident_id],
+                [
+                    'household_id' => $request->household_id,
+                    'is_head' => false
+                ]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Household updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update household',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function leaveHousehold(Resident $resident)
+    {
+        try {
+            $householdMember = HouseholdMember::where('resident_id', $resident->resident_id)->first();
+
+            if (!$householdMember) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Resident is not in any household'
+                ], 404);
+            }
+
+            if ($householdMember->is_head) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Household head cannot leave the household'
+                ], 400);
+            }
+
+            // Delete using the correct primary key
+            HouseholdMember::where('household_mem_id', $householdMember->household_mem_id)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully left household'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Leave household error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to leave household: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

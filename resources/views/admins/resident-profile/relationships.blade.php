@@ -7,15 +7,20 @@
     </div>
 
     <div id="relationships-content" class="px-4 pb-4 hidden">
-        <button
-            onclick="addNewRelationshipField()"
-            class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Add New Relationship
-        </button>
+        <form id="relationshipForm" action="{{ route('admin.resident.storeRelationship', $resident->resident_id) }}" method="POST">
+            @csrf
+            <button type="button" onclick="addNewRelationshipField()" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                Add New Relationship
+            </button>
 
-        <div id="familyMember" class="space-y-4 mb-4">
-            <!-- Dynamic fields will be added here -->
-        </div>
+            <div id="familyMember" class="space-y-4 mb-4">
+                <!-- Dynamic fields added here -->
+            </div>
+
+            <button id="saveAllRelationshipsBtn" type="submit" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 hidden">
+                Save All Relationships
+            </button>
+        </form>
 
         @if($resident->relatedTo->count() > 0)
         <div class="overflow-x-auto">
@@ -31,15 +36,36 @@
                     @foreach($resident->relatedTo as $relation)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            @if($relation->resident)
                             {{ $relation->resident->first_name }}
                             {{ $relation->resident->last_name }}
+                            @else
+                            {{ $relation->name }}
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <form action="{{ route('admin.resident.editRelationship', ['relation' => $relation->blood_relation_id]) }}" method="POST">
+                            <form action="{{ route('admin.resident.editRelationship', ['relation' => $relation->blood_relation_id]) }}" method="POST" class="flex items-center gap-2">
                                 @csrf
                                 @method('PUT')
-                                <input type="text" name="relationship" value="{{ $relation->relationship }}" class="border rounded px-2 py-1">
-                                <button type="submit" class="text-blue-500">Save</button>
+                                <input type="text"
+                                    name="relationship"
+                                    value="{{ $relation->relationship }}"
+                                    class="border-none border rounded px-2 py-1 relationship-field"
+                                    disabled>
+                                <button type="button"
+                                    onclick="enableEditing(this)"
+                                    class="text-blue-500 edit-button">
+                                    Edit
+                                </button>
+                                <button type="submit"
+                                    class="text-green-500 save-button hidden">
+                                    Save
+                                </button>
+                                <button type="button"
+                                    onclick="cancelEditing(this, '{{ $relation->relationship }}')"
+                                    class="text-red-500 cancel-button hidden">
+                                    Cancel
+                                </button>
                             </form>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -97,42 +123,90 @@
     let familyMemberCounter = 0;
     let currentFamilyMemberIndex = null;
 
+    function enableEditing(editButton) {
+        const form = editButton.closest('form');
+        const inputField = form.querySelector('.relationship-field');
+        const saveButton = form.querySelector('.save-button');
+        const cancelButton = form.querySelector('.cancel-button');
+
+        inputField.disabled = false;
+
+        editButton.classList.add('hidden');
+        saveButton.classList.remove('hidden');
+        cancelButton.classList.remove('hidden');
+
+        inputField.focus();
+    }
+
+    function cancelEditing(cancelButton, originalValue) {
+        const form = cancelButton.closest('form');
+        const inputField = form.querySelector('.relationship-field');
+        const editButton = form.querySelector('.edit-button');
+        const saveButton = form.querySelector('.save-button');
+
+        inputField.value = originalValue;
+
+        inputField.disabled = true;
+
+        cancelButton.classList.add('hidden');
+        saveButton.classList.add('hidden');
+        editButton.classList.remove('hidden');
+    }
+
     function addNewRelationshipField() {
         const familyMemberDiv = document.getElementById('familyMember');
         const newMemberDiv = document.createElement('div');
         newMemberDiv.classList.add('flex', 'items-center', 'gap-4', 'mb-4');
 
         newMemberDiv.innerHTML = `
-        <input type="hidden" name="relationships[${familyMemberCounter}][resident_id]" class="resident-id">
-        <div class="flex flex-col gap-2 w-full">
-            <input type="text" 
-                name="relationships[${familyMemberCounter}][name]" 
-                class="bg-[#f5f5f5] border-gray-300 rounded-md p-2 w-full" 
-                placeholder="Resident name" 
-                readonly>
-            <input type="text" 
-                name="relationships[${familyMemberCounter}][relationship]" 
-                class="bg-[#f5f5f5] border-gray-300 rounded-md p-2 w-full" 
-                placeholder="Relationship">
-        </div>
-        <button type="button" 
-            onclick="openConnectResidentModal(${familyMemberCounter})" 
-            class="bg-barangay-main text-white p-2 rounded-md">
-            Connect
-        </button>
-        <button type="button" 
-            onclick="removeRelationshipField(this)" 
-            class="bg-red-500 text-white p-2 rounded-md">
-            Remove
-        </button>
+    <input type="hidden" name="relationships[${familyMemberCounter}][resident_id]" class="resident-id">
+    <div class="flex flex-col gap-2 w-full">
+        <input type="text" 
+            name="relationships[${familyMemberCounter}][name]" 
+            class="bg-[#f5f5f5] border-gray-300 rounded-md p-2 w-full" 
+            placeholder="Resident name">
+        <input type="text" 
+            name="relationships[${familyMemberCounter}][relationship]" 
+            class="bg-[#f5f5f5] border-gray-300 rounded-md p-2 w-full" 
+            placeholder="Relationship" 
+            required>
+    </div>
+    <button type="button" 
+        onclick="openConnectResidentModal(${familyMemberCounter})" 
+        class="bg-barangay-main text-white p-2 rounded-md">
+        Connect
+    </button>
+    <button type="button" 
+        onclick="removeRelationshipField(this)" 
+        class="bg-red-500 text-white p-2 rounded-md">
+        Remove
+    </button>
     `;
 
         familyMemberDiv.appendChild(newMemberDiv);
         familyMemberCounter++;
+
+        // Show the save button
+        toggleSaveButton();
+    }
+
+    function toggleSaveButton() {
+        const saveButton = document.getElementById('saveAllRelationshipsBtn');
+        const familyMemberDiv = document.getElementById('familyMember');
+
+        if (familyMemberDiv.children.length > 0) {
+            saveButton.classList.remove('hidden');
+        } else {
+            saveButton.classList.add('hidden');
+        }
     }
 
     function removeRelationshipField(button) {
         button.closest('div').remove();
+        familyMemberCounter--;
+
+        // Hide the save button if no fields are present
+        toggleSaveButton();
     }
 
     function loadResidents(search = '') {
