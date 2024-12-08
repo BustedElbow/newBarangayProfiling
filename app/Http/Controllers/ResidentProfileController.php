@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Resident;
 use App\Models\BloodRelation;
+use App\Models\HouseholdMember;
+use Illuminate\Support\Facades\Log;
 
 class ResidentProfileController extends Controller
 {
@@ -76,5 +78,68 @@ class ResidentProfileController extends Controller
         }
 
         return redirect()->back()->with('success', 'Relationships added successfully');
+    }
+
+    public function updateHousehold(Request $request, Resident $resident)
+    {
+        try {
+            $request->validate([
+                'household_id' => 'required|exists:households,household_id',
+            ]);
+
+            $householdMember = HouseholdMember::updateOrCreate(
+                ['resident_id' => $resident->resident_id],
+                [
+                    'household_id' => $request->household_id,
+                    'is_head' => false
+                ]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Household updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update household',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function leaveHousehold(Resident $resident)
+    {
+        try {
+            $householdMember = HouseholdMember::where('resident_id', $resident->resident_id)->first();
+
+            if (!$householdMember) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Resident is not in any household'
+                ], 404);
+            }
+
+            if ($householdMember->is_head) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Household head cannot leave the household'
+                ], 400);
+            }
+
+            // Delete using the correct primary key
+            HouseholdMember::where('household_mem_id', $householdMember->household_mem_id)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully left household'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Leave household error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to leave household: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

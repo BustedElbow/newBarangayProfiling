@@ -65,6 +65,14 @@ Route::prefix('admin')->group(function () {
         Route::delete('/resident/{relation}/delete-relatinship', [ResidentProfileController::class, 'deleteRelationship'])->name('admin.resident.deleteRelationship');
         Route::post('/admin/resident/{resident}/relationships', [ResidentProfileController::class, 'storeRelationship'])
         ->name('admin.resident.storeRelationship');
+
+
+        Route::patch('/residents/{resident}/update-household', [ResidentProfileController::class, 'updateHousehold'])
+        ->name('admin.resident.updateHousehold');
+
+        Route::delete('/residents/{resident}/leave-household', [ResidentProfileController::class, 'leaveHousehold'])
+        ->name('admin.resident.leaveHousehold');
+        
     });
 });
 

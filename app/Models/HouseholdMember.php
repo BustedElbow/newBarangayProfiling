@@ -9,6 +9,7 @@ class HouseholdMember extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'household_mem_id';
     protected $fillable = [
         'household_id',
         'resident_id',
