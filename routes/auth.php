@@ -14,7 +14,7 @@ use App\Http\Controllers\Auth\ResidentAuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'role:official'])->group(function () {
+Route::middleware(['auth:official', 'role:official'])->group(function () {
 
     Route::prefix('admin')->group(function() {
 

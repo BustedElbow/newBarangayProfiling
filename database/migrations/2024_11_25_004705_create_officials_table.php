@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('position');
             $table->date('term_start');
             $table->date('term_end');
+            $table->boolean('is_active');
             $table->timestamps();
         });
     }
