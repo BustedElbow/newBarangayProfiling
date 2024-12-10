@@ -7,11 +7,6 @@
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl font-weight-light uppercase font-inter text-[#4169e1] font-semibold">welcome to the</h3>
                 <p class="capitalize font-bold text-5xl font-raleway">official barangay kalinaw website</p>
-                @if(Auth::check())
-                <span>Im gay</span>
-                @else
-                <span>Didnt work</span>
-                @endif
             </div>
         </div>
     </div>

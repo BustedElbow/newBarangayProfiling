@@ -28,7 +28,7 @@ Route::get('/', function () {
 })->name('resident.home');
 
 
-Route::middleware(['auth:resident', 'role:resident,official'])->group(function () {
+Route::middleware(['auth:resident'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -41,7 +41,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthenticatedSessionController::class, 'store'])->name('admin.login.store');
 
     //Protected Routes
-    Route::middleware(['auth', 'role:official'])->group( function () {
+    Route::middleware(['auth:official'])->group( function () {
 
         Route::get('/dashboard',function () {
             return view('admins.dashboard');
