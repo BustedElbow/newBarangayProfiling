@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisteredResidentController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\ResidentAuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,10 +33,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('login', [ResidentAuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('login', [ResidentAuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
@@ -50,13 +51,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-
-
-Route::middleware('role:official')->group(function() {
-    
-});
-
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:resident')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -75,8 +70,12 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    Route::post('logout', [ResidentAuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+});
+
+Route::middleware('auth')->group(function() {
+    
 });
 
 

@@ -30,6 +30,11 @@
             <input value="{{ session('register_data.birthdate') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
         </div>
         <div class="flex flex-col gap-1">
+            <label for="age" class="font-semibold font-inter">Age</label>
+            <input value="{{ session('register_data.age') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
+        </div>
+
+        <div class="flex flex-col gap-1">
             <label for="CivilStatus" class="font-semibold font-inter">Civil Status</label>
             <input value="{{ session('register_data.civil_status') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
         </div>
@@ -84,14 +89,23 @@
         @endforeach
     </ul>
     @endif
-    <!-- <div class="flex gap-5">
-        <div class="flex flex-col gap-1">
-            <label for="Occupation" class="font-semibold font-inter">Person Name</label>
-            <input value="John Doe" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
-        </div>
-        <div class="flex flex-col gap-1">
-            <label for="Employer" class="font-semibold font-inter">Relationship</label>
-            <input value="Brother" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter w-[323px] focus:outline-none">
-        </div>
-    </div> -->
+    @if (session('register_data.household_action') === 'new')
+    <!-- Display New Household Details -->
+    <div class="flex flex-col gap-1 w-full">
+        <label class="font-semibold font-inter" for="">New Household Name</label>
+        <input value="{{ session('register_data.new_household_name') }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter focus:outline-none w-full">
+    </div>
+    @elseif (session('register_data.household_action') === 'existing')
+    <!-- Display Existing Household Details -->
+    @if (isset($householdDetails))
+    <div class="flex flex-col gap-1 w-full">
+        <label class="font-semibold font-inter" for="">Household Name</label>
+        <input value="{{ $householdDetails->household_name }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter focus:outline-none w-full">
+    </div>
+    <div class="flex flex-col gap-1 w-full">
+        <label class="font-semibold font-inter" for="">Total Members</label>
+        <input value="{{ $householdDetails->members->count() }}" readonly class="bg-[#F5F5F5] border-black border-b p-2 font-inter focus:outline-none w-full">
+    </div>
+    @endif
+    @endif
 </div>

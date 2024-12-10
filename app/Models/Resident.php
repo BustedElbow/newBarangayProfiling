@@ -42,15 +42,23 @@ class Resident extends Model
         return $this->hasOne(User::class, 'resident_id', 'resident_id');
     }
 
-    // public function bloodRelations()
-    // {
-    //     return $this->hasMany(BloodRelation::class, 'resident_id');
-    // }
+    public function bloodRelations()
+    {
+        return $this->hasMany(BloodRelation::class, 'resident_id');
+    }
+
+    public function relatedTo() {
+        return $this->hasMany(BloodRelation::class, 'related_to_resident_id');
+    }
 
     public function showResidents()
     {
         $residents = Resident::all();
 
         return view('admin.residents', compact('residents'));  // Pass residents to the view
+    }
+
+    public function householdMember() {
+        return $this->hasOne(HouseholdMember::class, 'resident_id', 'resident_id');
     }
 }

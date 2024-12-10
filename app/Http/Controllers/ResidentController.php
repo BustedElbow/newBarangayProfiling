@@ -11,7 +11,7 @@ class ResidentController extends Controller
     public function create(): View {
         session()->forget(['register_data', 'current_step']);
 
-        $residents = Resident::all();
+        $residents = Resident::paginate(10);
 
         return view('admins.residents', compact('residents'));
     }

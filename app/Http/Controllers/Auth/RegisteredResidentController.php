@@ -8,14 +8,23 @@ use Illuminate\View\View;
 use App\Models\Resident;
 use App\Models\User;
 use App\Models\BloodRelation;
+use App\Models\Household;
+use App\Models\HouseholdMember;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredResidentController extends Controller
 {
     
     public function create(Request $request){
         $currentStep = session('current_step', 1);
-        return view('auth.admin.resident.register', compact('currentStep'));
+        $householdDetails = null;
+        if (session('register_data.household_action') === 'existing') {
+            $householdId = session('register_data.existing_household_id');
+            $householdDetails = Household::with('members')->find($householdId);
+        }
+
+        return view('auth.admin.resident.register', compact('currentStep', 'householdDetails'));
     }
 
     public function handleForm(Request $request)
@@ -64,6 +73,9 @@ class RegisteredResidentController extends Controller
 
         if ($step == 2) {
             $rules = [
+                'household_action' => 'required|string|in:new,existing',
+                'new_household_name' => 'required_if:household_action,new|string|max:255',
+                'existing_household_id' => 'required_if:household_action,existing|nullable|exists:households,household_id',
                 'family_members' => 'array',
                 'family_members.*.name' => 'required|string|max:255',
                 'family_members.*.relationship' => 'required|string|max:255',
@@ -98,16 +110,17 @@ class RegisteredResidentController extends Controller
                 'register_data.address' => $request->address,
                 'register_data.nationality' => $request->nationality
             ]);
-
-            //Log::info('Stored session data:', session()->all());
         }
 
         if ($step == 2) {
             $familyMembers = $request->input('family_members', []);
-            session(['register_data.family_members' => $familyMembers]);
+            session([
+                'register_data.household_action' => $request->household_action,
+                'register_data.new_household_name' => $request->new_household_name,
+                'register_data.existing_household_id' => $request->existing_household_id,
+                'register_data.family_members' => $familyMembers,
+            ]);
 
-            // Log::info('Family members stored in session:', ['family_members' => $familyMembers]);
-            // Log::info('Complete register_data in session:', session('register_data'));
         }
 
         if ($step == 3) {
@@ -123,35 +136,47 @@ class RegisteredResidentController extends Controller
     {
         $residentData = session('register_data');
 
-        // Generate identification number
         $residentData['identification_number'] = $this->generateIdentificationNumber();
 
-        // Store resident data in the database
         $resident = Resident::create($residentData);
 
-        //Log::info('Created Resident:', ['resident' => $resident]);
-
-        // Create a user for the resident
         $this->createUserForResident($resident);
+
+
+        if ($residentData['household_action'] === 'new') {
+            $household = Household::create([
+                'household_name' => $residentData['new_household_name'],
+            ]);
+
+            // dd($household->toArray());
+
+            Log::info('Household created', ['household_id' => $household->household_id]);
+
+            HouseholdMember::create([
+                'household_id' => $household->household_id,
+                'resident_id'=> $resident->resident_id,
+                'is_head' => true,
+            ]);
+        } elseif ($residentData['household_action'] === 'existing') {
+            $householdId = $residentData['existing_household_id'];
+            HouseholdMember::create([
+                'household_id' => $householdId,
+                'resident_id' => $resident->resident_id,
+                'is_head' => false,
+            ]);
+        }
+
 
         if (!empty($residentData['family_members'])) {
             foreach ($residentData['family_members'] as $familyMember) {
                 // If the frontend already provides the resident_id, use it
                 $linkedResidentId = $familyMember['resident_id'] ?? null;
 
-                // Fallback: If not provided, search in the database
-                // if (!$linkedResidentId) {
-                //     $existingResident = Resident::where('first_name', $familyMember['name'])
-                //     ->orWhere('last_name', $familyMember['name'])
-                //     ->first();
-                //     $linkedResidentId = $existingResident ? $existingResident->resident_id : null;
-                // }
-
                 BloodRelation::create([
-                    'related_to_resident_id' => $resident->resident_id, // Current resident's ID
-                    'name' => $familyMember['name'], // Entered family member's name
-                    'relationship' => $familyMember['relationship'], // Provided relationship
-                    'resident_id' => $linkedResidentId, // Use the linked resident_id
+                    'related_to_resident_id' => $resident->resident_id,
+                    'name' => $familyMember['name'], 
+                    'relationship' => $familyMember['relationship'],
+                    'resident_id' => $linkedResidentId, 
                 ]);
             }
         }

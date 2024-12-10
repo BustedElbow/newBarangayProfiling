@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Resident;
+use App\Models\ResidentLog;
 
 class ResidentObserver
 {
@@ -19,7 +20,20 @@ class ResidentObserver
      */
     public function updated(Resident $resident): void
     {
-        //
+        $changes = $resident->getChanges();
+        $original = $resident->getOriginal();
+
+        foreach($changes as $field => $new_value) {
+            ResidentLog::create([
+                'resident_id' => $resident->resident_id,
+                // 'official_id' => Auth::id(),
+                'field_changed' => $field,
+                'old_value' => $original[$field] ?? null,
+                'new_value' => $new_value,
+                'action' => 'update',
+                'timestamp' => now(),
+            ]);
+        }
     }
 
     /**

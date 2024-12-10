@@ -13,9 +13,18 @@ class BloodRelation extends Model
     protected $primaryKey = 'blood_relation_id';
 
     protected $fillable = [
-        'related_to_resident_id',
+        'related_to_resident_id', //Resident ID that the person is related to
         'name',
         'relationship',
-        'resident_id',
+        'resident_id', //Resident ID of the person
     ];
+
+    public function resident() {
+        return $this->belongsTo(Resident::class, 'resident_id');
+    }
+
+    public function relatedResident() {
+        return $this->belongsTo(Resident::class, 'related_to_resident_id');
+    }
+
 }
