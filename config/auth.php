@@ -38,12 +38,14 @@ return [
     'guards' => [
         'resident' => [
             'driver' => 'session',
-            'provider' => 'users'
+            'provider' => 'users',
+            'session' => 'resident_session',
         ],
 
         'official' => [
             'driver' => 'session',
             'provider' => 'users',
+            'session' => 'admin_session'
         ],
 
         'web' => [

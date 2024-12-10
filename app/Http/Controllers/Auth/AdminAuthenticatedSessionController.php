@@ -66,8 +66,11 @@ class AdminAuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse {
         Auth::guard('official')->logout();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Only invalidate admin session
+        if ($request->hasCookie('admin_session')) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return redirect('/');
     }

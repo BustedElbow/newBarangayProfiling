@@ -131,6 +131,9 @@ return [
         Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
+    'admin_cookie' => env('ADMIN_SESSION_COOKIE', 'admin_session'),
+    'resident_cookie' => env('RESIDENT_SESSION_COOKIE', 'resident_session'),
+
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path
