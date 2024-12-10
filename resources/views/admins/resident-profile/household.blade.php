@@ -40,7 +40,7 @@
         @endif
         @else
         <p class="text-gray-500">No household assigned.</p>
-        <button type="button" onclick="openExistingHouseholdsModal()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3 mt-4">Join Existing Household</button>
+        <button type="button" onclick="openExistingHouseholdsModal()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-4 mt-4 rounded-md">Join Existing Household</button>
         @endif
     </div>
 </div>

@@ -66,12 +66,12 @@ Route::prefix('admin')->group(function () {
         Route::post('/admin/resident/{resident}/relationships', [ResidentProfileController::class, 'storeRelationship'])
         ->name('admin.resident.storeRelationship');
 
-
         Route::patch('/residents/{resident}/update-household', [ResidentProfileController::class, 'updateHousehold'])
         ->name('admin.resident.updateHousehold');
-
         Route::delete('/residents/{resident}/leave-household', [ResidentProfileController::class, 'leaveHousehold'])
         ->name('admin.resident.leaveHousehold');
+
+        Route::post('/officials', [OfficialController::class, 'store'])->name('admin.officials.store');
         
     });
 });
