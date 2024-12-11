@@ -27,7 +27,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($residentData->householdMember->household->members as $member)
-                    <tr class="border-b {{ $member->resident_id == $resident->resident_id ? 'bg-yellow-100' : '' }}">
+                    <tr class="border-b {{ $member->resident_id == $residentData->resident_id ? 'bg-yellow-100' : '' }}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ $member->resident->first_name }}
                             {{ $member->resident->last_name }}
@@ -115,7 +115,7 @@
 
     // Function to assign the resident to a selected household
     function assignToHousehold(householdId) {
-        const residentId = "{{ $resident->resident_id }}";
+        const residentId = "{{ $residentData->resident_id }}";
 
         fetch(`/admin/residents/${residentId}/update-household`, {
                 method: 'PATCH',
@@ -148,7 +148,7 @@
             return;
         }
 
-        const residentId = "{{ $resident->resident_id }}";
+        const residentId = "{{ $residentData->resident_id }}";
 
         fetch(`/admin/residents/${residentId}/leave-household`, {
                 method: 'DELETE',

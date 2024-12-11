@@ -12,8 +12,8 @@
                         <!-- Profile Image -->
                         <div class="w-24 h-24 rounded-full border-2 border-barangay-main overflow-hidden bg-gray-100">
                             <img
-                                src="{{ auth()->user()->resident->image ?? asset('images/default-profile.png') }}"
-                                alt="Profile Picture"
+                                src="{{ $resident->image ? asset('storage/uploads/profile_images/' . basename($resident->image)) : asset('images/icons/default-profile.png') }}"
+                                alt="{{ $resident->first_name }}'s Photo"
                                 class="w-full h-full object-cover">
                         </div>
 

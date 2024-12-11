@@ -16,7 +16,7 @@
         </div>
         @endif
 
-        <form class="flex flex-col gap-5 items-end h-full border border-[#1e1e1e] border-opacity-25 rounded-lg  bg-slate-200 p-2" action="{{ route('admin.resident.store') }}" method="POST">
+        <form enctype="multipart/form-data" class="flex flex-col gap-5 items-end h-full border border-[#1e1e1e] border-opacity-25 rounded-lg  bg-slate-200 p-2" action="{{ route('admin.resident.store') }}" method="POST">
             @csrf
             <div class="border border-[#1e1e1e] border-opacity-25 rounded-lg bg-[#fafafa] p-5 w-full">
                 @include('auth.admin.resident.register_partials.step-1')

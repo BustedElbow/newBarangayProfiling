@@ -10,7 +10,7 @@
     <!-- Accordion Content -->
     <div class="accordion-content p-6 space-y-6 hidden" id="personal-info-content">
         <!-- Form Fields -->
-        <form id="update-resident-form" class="space-y-6" method="POST" action="{{ route('admin.resident.update', $resident->resident_id) }}">
+        <form id="update-resident-form" class="space-y-6" method="POST" action="{{ route('admin.resident.update', $residentData->resident_id) }}">
             @csrf
             @method('PATCH')
 

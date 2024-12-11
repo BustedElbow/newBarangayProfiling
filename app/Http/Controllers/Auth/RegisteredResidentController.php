@@ -52,13 +52,24 @@ class RegisteredResidentController extends Controller
                 'household_action' => 'required|string|in:new,existing',
                 'new_household_name' => 'required_if:household_action,new',
                 'existing_household_id' => 'required_if:household_action,existing',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                // Generate unique filename with original extension
+                $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                // Store in public storage and save relative path to DB
+                $imagePath = $file->storeAs('uploads/profile_images', $fileName, 'public');
+                $validated['image'] = $imagePath; // This will be saved to DB
+            }
 
             DB::beginTransaction();
 
             // Create Resident
             $resident = Resident::create([
                 'identification_number' => $this->generateIdentificationNumber(),
+                'image' => $validated['image'] ?? null,
                 'first_name' => $validated['first_name'],
                 'middle_name' => $validated['middle_name'],
                 'last_name' => $validated['last_name'],

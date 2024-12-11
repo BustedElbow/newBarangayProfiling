@@ -35,6 +35,7 @@ class Resident extends Model
         'address',
         'employer',
         'nationality',
+        'image',
     ];
 
     public function user()

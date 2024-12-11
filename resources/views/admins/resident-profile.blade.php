@@ -5,7 +5,8 @@
     <!-- Left Panel -->
     <div class="flex flex-col gap-5 bg-[#fafafa] h-fit p-5 border border-[#1e1e1e] border-opacity-25 rounded-lg ">
         <!-- Profile Picture -->
-        <img class="w-[210px] h-[210px] bg-gray-100 border border-gray-300 rounded" src="" alt="Profile picture">
+        <img class="w-[210px] h-[210px] bg-gray-100 border border-gray-300 rounded" src="{{ $residentData->image ? asset('storage/uploads/profile_images/' . basename($residentData->image)) : asset('images/icons/default-profile.png') }}"
+            alt="{{ $residentData->first_name }}'s Photo">
 
         <!-- Info/Logs Tabs -->
         <div class="flex rounded border border-barangay-main overflow-hidden">
@@ -31,6 +32,7 @@
         @include('admins.resident-profile.personal-information')
         @include('admins.resident-profile.relationships')
         @include('admins.resident-profile.household')
+        @include('admins.resident-profile.clearance-list')
     </div>
 </div>
 

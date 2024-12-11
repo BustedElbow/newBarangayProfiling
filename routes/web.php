@@ -56,12 +56,14 @@ Route::prefix('admin')->group(function () {
         Route::patch('/residents/{resident}', [ResidentProfileController::class, 'update'])->name('admin.resident.update');
 
         Route::get('/households', [HouseHoldController::class, 'create'])->name('admin.households');
+        Route::get('/households/{household}', [HouseholdController::class, 'show'])
+        ->name('admin.household.show');
         
         Route::get('/officials', [OfficialController::class, 'create'])->name('admin.officials');
 
         Route::get('/events', [EventController::class, 'create'])->name('admin.events');
 
-        Route::get('/services', [BrgyClearanceController::class, 'index'])->name('admin.services');
+        Route::get('/clearances', [BrgyClearanceController::class, 'index'])->name('admin.clearances');
 
         Route::put('/resident/{relation}/edit-relationship', [ResidentProfileController::class, 'editRelationship'])->name('admin.resident.editRelationship');
         Route::delete('/resident/{relation}/delete-relatinship', [ResidentProfileController::class, 'deleteRelationship'])->name('admin.resident.deleteRelationship');
@@ -74,6 +76,11 @@ Route::prefix('admin')->group(function () {
         ->name('admin.resident.leaveHousehold');
 
         Route::post('/officials', [OfficialController::class, 'store'])->name('admin.officials.store');
+
+        Route::patch('/clearances/{clearance}/approve', [BrgyClearanceController::class, 'approve'])->name('clearances.approve');
+        Route::patch('/clearances/{clearance}/for-claim', [BrgyClearanceController::class, 'markForClaim'])->name('clearances.forClaim');
+        Route::patch('/clearances/{clearance}/claim', [BrgyClearanceController::class, 'markAsClaimed'])->name('clearances.claim');
+        Route::patch('/clearances/{clearance}/reject', [BrgyClearanceController::class, 'reject']);
         
     });
 });

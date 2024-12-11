@@ -16,12 +16,9 @@
                 class="block p-4 bg-gray-100 hover:bg-barangay-main hover:text-white rounded transition duration-200"
                 href="{{ route('admin.resident.profile', ['residentId' => $resident->resident_id]) }}">
                 <div class="flex items-center gap-4">
-                    <!-- Resident Image -->
-                    <img
-                        class="w-12 h-12 border rounded-full object-cover"
-                        src="{{ $resident->image ?? 'https://via.placeholder.com/150' }}"
-                        alt="Resident Image">
-                    <!-- Resident Name -->
+                    <img class="w-12 h-12 border rounded-full object-cover"
+                        src="{{ $resident->image ? asset('storage/uploads/profile_images/' . basename($resident->image)) : asset('images/icons/default-profile.png') }}"
+                        alt="{{ $resident->first_name }}'s Photo">
                     <span class="font-medium text-gray-800">
                         {{ $resident->last_name }}, {{ $resident->first_name }} {{ $resident->middle_name }}
                     </span>

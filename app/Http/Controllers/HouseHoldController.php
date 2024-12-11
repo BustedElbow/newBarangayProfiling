@@ -30,4 +30,10 @@ class HouseHoldController extends Controller
 
         return view('admins.households', compact('households'));
     }
+
+    public function show(Household $household)
+    {
+        $household->load(['members.resident']);
+        return view('admins.household-profile', compact('household'));
+    }
 }

@@ -43,7 +43,7 @@
                     <a class="flex pl-5 gap-3 font-inter text-base py-3 {{ Request::is('*officials*') ? 'text-barangay-main border-barangay-main rounded-lg bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.officials')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*officials*') ? asset('images/icons/official128-main.png') : asset('images/icons/official128-black.png') }}" alt="">Officials</a>
                 </li>
                 <li class="p-2">
-                    <a class="flex pl-5 gap-3 font-inter text-base py-3 {{ Request::is('*services*') ? 'text-barangay-main border-barangay-main rounded-lg bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.services')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*services*') ? asset('images/icons/clerance128-main.png') : asset('images/icons/clerance128-black.png') }}" alt="">Services</a>
+                    <a class="flex pl-5 gap-3 font-inter text-base py-3 {{ Request::is('*clearances*') ? 'text-barangay-main border-barangay-main rounded-lg bg-slate-300' : 'text-[#1e1e1e]'}}" href="{{ route('admin.clearances')}}"><img class="w-[24px] h-[24px]" src="{{ Request::is('*clearances*') ? asset('images/icons/clerance128-main.png') : asset('images/icons/clerance128-black.png') }}" alt="">Clearances</a>
                 </li>
             </ul>
         </div>

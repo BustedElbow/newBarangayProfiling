@@ -8,7 +8,7 @@
             <label for="file-upload" class="font-inter bg-barangay-main text-white py-2 px-4 rounded cursor-pointer hover:bg-barangay-main/90">
                 Add Image
             </label>
-            <input id="file-upload" type="file" accept="image/*" class="hidden" onchange="previewImage(event)">
+            <input id="file-upload" type="file" name="image" accept="image/*" class="hidden" onchange="previewImage(event)">
         </div>
     </div>
 
@@ -133,10 +133,19 @@
 <!-- Image Preview JavaScript -->
 <script>
     function previewImage(event) {
-        const [file] = event.target.files;
-        if (file) {
-            const preview = document.getElementById('image-preview');
-            preview.src = URL.createObjectURL(file);
+        const file = event.target.files[0];
+        const preview = document.getElementById('image-preview');
+
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "{{ asset('images/icons/default-profile.png') }}";
         }
     }
 
