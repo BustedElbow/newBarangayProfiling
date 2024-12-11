@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="p-6 lg:p-8">
+<div class="p-6 mt-10 rounded-lg h-fit border border-[#1e1e1e] border-opacity-25 bg-[#fafafa]">
     <!-- Header Section -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
-            <h2 class="text-2xl font-bold text-gray-900">Households</h2>
+            <h2 class="text-2xl font-bold text-barangay-main">Households</h2>
             <p class="mt-1 text-sm text-gray-500">Manage and view all household records</p>
         </div>
 

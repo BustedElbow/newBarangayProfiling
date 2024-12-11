@@ -10,6 +10,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\HouseHoldController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\RegisteredResidentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -25,9 +26,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('residents.home');
-})->name('resident.home');
+Route::get('/', [HomeController::class, 'index'])->name('resident.home');
 
 
 Route::middleware(['auth:resident'])->group(function () {
