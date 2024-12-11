@@ -12,6 +12,7 @@ use App\Models\Household;
 use App\Models\HouseholdMember;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class RegisteredResidentController extends Controller
 {
@@ -27,165 +28,105 @@ class RegisteredResidentController extends Controller
         return view('auth.admin.resident.register', compact('currentStep', 'householdDetails'));
     }
 
-    public function handleForm(Request $request)
+    public function store(Request $request)
     {
-        $currentStep = session('current_step', 1);
+        try {
+            // Log incoming request data
+            Log::info('Registration attempt:', $request->all());
 
-        if ($request->has('previousForm') && $request->previousForm === 'previous') {
-            $currentStep = max(1, $currentStep - 1);
-        } else {
-            $this->validateStep($request, $currentStep);
-            $this->storeRegisterSession($request, $currentStep);
-            if ($currentStep > 0 && $currentStep < 4) {
-                $currentStep = $currentStep + 1;
-            }
-        }
-
-        session(['current_step' => $currentStep]);
-
-        if ($request->has('submit')) {
-            return $this->store($request);
-        }
-
-        return redirect()->route('admin.resident.register');
-    }
-
-
-    private function validateStep(Request $request, $step)
-    {
-        $rules = [];
-
-
-        if ($step == 1) {
-            $rules = [
+            // Validate with detailed messages
+            $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'image' => 'nullable|string|max:255',
-                'civil_status' => 'required|string|max:255',
                 'sex' => 'required|string|max:50',
                 'birthdate' => 'required|date',
-                'address' => 'required|string',
+                'age' => 'required|integer',
+                'civil_status' => 'required|string|max:255',
                 'contact_number' => 'required|string',
+                'address' => 'required|string',
                 'nationality' => 'required|string',
-            ];
-        }
-
-        if ($step == 2) {
-            $rules = [
-                'household_action' => 'required|string|in:new,existing',
-                'new_household_name' => 'required_if:household_action,new|string|max:255',
-                'existing_household_id' => 'required_if:household_action,existing|nullable|exists:households,household_id',
-                'family_members' => 'array',
-                'family_members.*.name' => 'required|string|max:255',
-                'family_members.*.relationship' => 'required|string|max:255',
-                'family_members.*.resident_id' => 'nullable|exists:residents,resident_id',
-            ];
-        }
-
-        if ($step == 3) {
-            $rules = [
                 'occupation' => 'required|string|max:255',
                 'employer' => 'required|string|max:255',
                 'educational_attainment' => 'required|string|max:255',
-                'health_conditions' => 'nullable|string',
-            ];
-        }
-
-        $request->validate($rules);
-    }
-
-    private function storeRegisterSession(Request $request, $step)
-    {
-        if ($step == 1) {
-            session([
-                'register_data.first_name' => $request->first_name,
-                'register_data.middle_name' => $request->middle_name,
-                'register_data.last_name' => $request->last_name,
-                'register_data.civil_status' => $request->civil_status,
-                'register_data.sex' => $request->sex,
-                'register_data.contact_number' => $request->contact_number,
-                'register_data.birthdate' => $request->birthdate,
-                'register_data.age' => $request->age,
-                'register_data.address' => $request->address,
-                'register_data.nationality' => $request->nationality
-            ]);
-        }
-
-        if ($step == 2) {
-            $familyMembers = $request->input('family_members', []);
-            session([
-                'register_data.household_action' => $request->household_action,
-                'register_data.new_household_name' => $request->new_household_name,
-                'register_data.existing_household_id' => $request->existing_household_id,
-                'register_data.family_members' => $familyMembers,
+                'household_action' => 'required|string|in:new,existing',
+                'new_household_name' => 'required_if:household_action,new',
+                'existing_household_id' => 'required_if:household_action,existing',
             ]);
 
-        }
+            DB::beginTransaction();
 
-        if ($step == 3) {
-            session([
-                'register_data.occupation' => $request->occupation,
-                'register_data.employer' => $request->employer,
-                'register_data.educational_attainment' => $request->educational_attainment,
-            ]);
-        }
-    }
-
-    public function store(Request $request)
-    {
-        $residentData = session('register_data');
-
-        $residentData['identification_number'] = $this->generateIdentificationNumber();
-
-        $resident = Resident::create($residentData);
-
-        $this->createUserForResident($resident);
-
-
-        if ($residentData['household_action'] === 'new') {
-            $household = Household::create([
-                'household_name' => $residentData['new_household_name'],
+            // Create Resident
+            $resident = Resident::create([
+                'identification_number' => $this->generateIdentificationNumber(),
+                'first_name' => $validated['first_name'],
+                'middle_name' => $validated['middle_name'],
+                'last_name' => $validated['last_name'],
+                'sex' => $validated['sex'],
+                'birthdate' => $validated['birthdate'],
+                'age' => $validated['age'],
+                'civil_status' => $validated['civil_status'],
+                'contact_number' => $validated['contact_number'],
+                'address' => $validated['address'],
+                'nationality' => $validated['nationality'],
+                'occupation' => $validated['occupation'],
+                'employer' => $validated['employer'],
+                'educational_attainment' => $validated['educational_attainment'],
             ]);
 
-            // dd($household->toArray());
+            Log::info('Resident created:', $resident->toArray());
 
-            Log::info('Household created', ['household_id' => $household->household_id]);
+            // Create User
+            $user = $this->createUserForResident($resident);
+            Log::info('User created:', $user->toArray());
 
-            HouseholdMember::create([
-                'household_id' => $household->household_id,
-                'resident_id'=> $resident->resident_id,
-                'is_head' => true,
-            ]);
-        } elseif ($residentData['household_action'] === 'existing') {
-            $householdId = $residentData['existing_household_id'];
-            HouseholdMember::create([
-                'household_id' => $householdId,
-                'resident_id' => $resident->resident_id,
-                'is_head' => false,
-            ]);
-        }
+            // Handle Household
+            if ($validated['household_action'] === 'new') {
+                $household = Household::create([
+                    'household_name' => $validated['new_household_name']
+                ]);
 
-
-        if (!empty($residentData['family_members'])) {
-            foreach ($residentData['family_members'] as $familyMember) {
-                // If the frontend already provides the resident_id, use it
-                $linkedResidentId = $familyMember['resident_id'] ?? null;
-
-                BloodRelation::create([
-                    'related_to_resident_id' => $resident->resident_id,
-                    'name' => $familyMember['name'], 
-                    'relationship' => $familyMember['relationship'],
-                    'resident_id' => $linkedResidentId, 
+                HouseholdMember::create([
+                    'household_id' => $household->household_id,
+                    'resident_id' => $resident->resident_id,
+                    'is_head' => true
+                ]);
+            } elseif ($validated['household_action'] === 'existing') {
+                HouseholdMember::create([
+                    'household_id' => $validated['existing_household_id'],
+                    'resident_id' => $resident->resident_id,
+                    'is_head' => false
                 ]);
             }
+
+            // Handle Family Members
+            if ($request->has('family_members')) {
+                foreach ($request->family_members as $member) {
+                    BloodRelation::create([
+                        'related_to_resident_id' => $resident->resident_id,
+                        'resident_id' => $member['resident_id'] ?? null,
+                        'name' => $member['name'],
+                        'relationship' => $member['relationship']
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.residents')
+                ->with('success', 'Resident registered successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Registration failed:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Registration failed: ' . $e->getMessage()]);
         }
-
-
-        // Reset session data
-        session()->forget(['register_data', 'currentStep']);
-
-        return redirect()->route('admin.residents');
     }
 
     protected function generateIdentificationNumber()
@@ -195,12 +136,11 @@ class RegisteredResidentController extends Controller
 
     protected function createUserForResident($resident)
     {
-        User::create([
+        return User::create([
             'resident_id' => $resident->resident_id,
             'name' => $resident->first_name .  $resident->middle_name . $resident->last_name,
             'email' => strtolower($resident->first_name . '.' . $resident->last_name) . '@example.com',
             'password' => Hash::make('default_password'), // Replace with secure password
-            'role' => 'resident',
         ]);
     }
 }

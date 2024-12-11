@@ -7,8 +7,16 @@
     </div>
 
     <div id="household-content" class="px-4 pb-4 hidden">
-        @if($resident->householdMember)
-        <p class="text-gray-500">Household Name: {{ $resident->householdMember->household->household_name }}</p>
+        @php
+        dump([
+        'resident_id' => $residentData->resident_id,
+        'household_member' => $residentData->householdMember,
+        'household' => $residentData->householdMember?->household,
+        'members' => $residentData->householdMember?->household?->members
+        ]);
+        @endphp
+        @if($residentData->householdMember)
+        <p class="text-gray-500">Household Name: {{ $residentData->householdMember->household->household_name }}</p>
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead>
@@ -18,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($resident->householdMember->household->members as $member)
+                    @foreach($residentData->householdMember->household->members as $member)
                     <tr class="border-b {{ $member->resident_id == $resident->resident_id ? 'bg-yellow-100' : '' }}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ $member->resident->first_name }}
@@ -35,7 +43,7 @@
                 </tbody>
             </table>
         </div>
-        @if(!$resident->householdMember->is_head)
+        @if(!$residentData->householdMember->is_head)
         <button type="button" onclick="leaveHousehold()" class="bg-red-500 text-white font-inter w-fit py-2 px-3 mt-4">Leave Household</button>
         @endif
         @else

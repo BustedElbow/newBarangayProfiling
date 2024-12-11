@@ -19,7 +19,7 @@
                 @foreach (['first_name' => 'First Name', 'middle_name' => 'Middle Name', 'last_name' => 'Last Name'] as $field => $label)
                 <div class="flex flex-col">
                     <label for="{{ $field }}" class="text-gray-500">{{ $label }}</label>
-                    <input class="form-input" type="text" name="{{ $field }}" value="{{ $resident->$field }}" readonly>
+                    <input class="form-input" type="text" name="{{ $field }}" value="{{ $residentData->$field }}" readonly>
                 </div>
                 @endforeach
             </div>
@@ -35,7 +35,7 @@
                 ] as $field => $label)
                 <div class="flex flex-col">
                     <label for="{{ $field }}" class="text-gray-500">{{ $label }}</label>
-                    <input class="form-input" type="text" name="{{ $field }}" value="{{ $resident->$field ?? 'N/A' }}" readonly>
+                    <input class="form-input" type="text" name="{{ $field }}" value="{{ $residentData->$field ?? 'N/A' }}" readonly>
                 </div>
                 @endforeach
             </div>
@@ -43,7 +43,7 @@
             <!-- Address -->
             <div class="flex flex-col">
                 <label for="address" class="text-gray-500">Address</label>
-                <input class="form-input" type="text" name="address" value="{{ $resident->address }}" readonly>
+                <input class="form-input" type="text" name="address" value="{{ $residentData->address }}" readonly>
             </div>
 
             <!-- Occupation -->
@@ -55,7 +55,7 @@
                 ] as $field => $label)
                 <div class="flex flex-col">
                     <label for="{{ $field }}" class="text-gray-500">{{ $label }}</label>
-                    <input class="form-input" type="text" name="{{ $field }}" value="{{ $resident->$field ?? 'N/A' }}" readonly>
+                    <input class="form-input" type="text" name="{{ $field }}" value="{{ $residentData->$field ?? 'N/A' }}" readonly>
                 </div>
                 @endforeach
             </div>

@@ -14,12 +14,12 @@ use App\Http\Controllers\Auth\ResidentAuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth:official', 'role:official'])->group(function () {
+Route::middleware(['auth:official'])->group(function () {
 
     Route::prefix('admin')->group(function() {
 
         Route::get('register', [RegisteredResidentController::class, 'create'])->name('admin.resident.register.show');
-        Route::post('register', [RegisteredResidentController::class, 'handleForm'])->name('admin.resident.register');
+        Route::post('register', [RegisteredResidentController::class, 'store'])->name('admin.resident.store');
         
         //Residents
         Route::prefix('residents')->group(function () {

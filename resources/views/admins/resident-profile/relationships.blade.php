@@ -7,7 +7,7 @@
     </div>
 
     <div id="relationships-content" class="px-4 pb-4 hidden">
-        <form id="relationshipForm" action="{{ route('admin.resident.storeRelationship', $resident->resident_id) }}" method="POST">
+        <form id="relationshipForm" action="{{ route('admin.resident.storeRelationship', $residentData->resident_id) }}" method="POST">
             @csrf
             <button type="button" onclick="addNewRelationshipField()" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
                 Add New Relationship
@@ -22,7 +22,7 @@
             </button>
         </form>
 
-        @if($resident->relatedTo->count() > 0)
+        @if($residentData->relatedTo->count() > 0)
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead>
@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($resident->relatedTo as $relation)
+                    @foreach($residentData->relatedTo as $relation)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
                             @if($relation->resident)

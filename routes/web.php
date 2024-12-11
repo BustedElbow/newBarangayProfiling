@@ -49,7 +49,7 @@ Route::prefix('admin')->group(function () {
         
         Route::get('/residents',[ResidentController::class, 'create'])->name('admin.residents');
         
-        Route::get('/residents/{resident}', [ResidentProfileController::class, 'create'])->name('admin.resident.profile');
+        Route::get('/residents/{residentId}', [ResidentProfileController::class, 'create'])->name('admin.resident.profile');
 
         Route::patch('/residents/{resident}', [ResidentProfileController::class, 'update'])->name('admin.resident.update');
 
