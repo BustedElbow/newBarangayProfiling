@@ -39,8 +39,11 @@ class ResidentAuthenticatedSessionController extends Controller
     public function destroy(Request $request) {
         Auth::guard('resident')->logout();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Only invalidate resident session
+        if ($request->hasCookie('resident_session')) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return redirect()->route('login');
     }

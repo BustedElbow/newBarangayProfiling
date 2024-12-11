@@ -61,4 +61,9 @@ class Resident extends Model
     public function householdMember() {
         return $this->hasOne(HouseholdMember::class, 'resident_id', 'resident_id');
     }
+
+    public function official()
+    {
+        return $this->hasOne(Official::class, 'resident_id', 'resident_id');
+    }
 }

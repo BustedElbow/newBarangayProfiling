@@ -12,23 +12,49 @@ use Illuminate\View\View;
 
 class OfficialAuthenticatedSessionController extends Controller
 {
-    public function create(): View {
+    public function create(): View
+    {
         return view('auth.admin-login');
     }
 
-    public function store(Request $request) {
-        $credentials = $request->only('email','password');
+    // Handle the login request
+    public function store(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
 
+        // Attempt to authenticate the official
+        if (Auth::guard('official')->attempt($credentials)) {
+            $request->session()->regenerate();
 
+            $user = Auth::guard('official')->user();
+
+            // Check if the official is active
+            if ($user->isActive) {
+                return redirect()->route('official.dashboard');
+            } else {
+                // Logout and return error if the official is inactive
+                Auth::guard('official')->logout();
+
+                return back()->withErrors([
+                    'email' => 'This account is no longer active.',
+                ]);
+            }
+        }
+
+        // If authentication fails
+        return back()->withErrors([
+            'email' => 'Invalid credentials.',
+        ]);
     }
 
-    public function destroy(Request $request) {
+    // Handle the logout request
+    public function destroy(Request $request)
+    {
         Auth::guard('official')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('');
+        return redirect()->route('admin-login'); // Update the route name if necessary
     }
-
 }

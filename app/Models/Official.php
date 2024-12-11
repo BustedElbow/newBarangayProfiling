@@ -14,6 +14,7 @@ class Official extends Model
         'position',
         'term_start',
         'term_end',
+        'is_active',
     ];
 
     public function resident() {
