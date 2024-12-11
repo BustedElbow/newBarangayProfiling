@@ -50,20 +50,16 @@
         <div class="flex justify-end gap-3 pt-4 border-t">
             <button type="button"
                 onclick="hideUIforNewHousehold()"
-                class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                class="px-4 py-2 text-gray-700 bg-gray-100  hover:bg-gray-200 transition-colors">
                 Cancel
-            </button>
-            <button type="button"
-                class="px-4 py-2 bg-barangay-main text-white rounded-lg hover:bg-opacity-90 transition-colors">
-                Create Household
             </button>
         </div>
     </div>
 </div>
 
-<div class="flex gap-5">
-    <button type="button" onclick="openExistingHouseholdsModal()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3">Add Existing Household</button>
-    <button type="button" onclick="showUIforNewHousehold()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3">Create New Household</button>
+<div class="flex gap-5 justify-center ">
+    <button type="button" onclick="openExistingHouseholdsModal()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3 rounded-lg">Join Existing Household</button>
+    <button type="button" onclick="showUIforNewHousehold()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3 rounded-lg">Create New Household</button>
 </div>
 
 <div id="selectedHouseholdPreview" class="hidden w-full bg-white rounded-lg shadow-md p-6">

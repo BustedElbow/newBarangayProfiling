@@ -66,4 +66,9 @@ class Resident extends Model
     {
         return $this->hasOne(Official::class, 'resident_id', 'resident_id');
     }
+
+    public function clearances()
+    {
+        return $this->hasMany(BrgyClearance::class, 'resident_id', 'resident_id');
+    }
 }

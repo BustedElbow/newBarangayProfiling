@@ -1,64 +1,77 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="p-10 flex space-x-10">
-    <!-- Barangay Clearance Panel -->
+<div class="p-10 flex justify-center space-x-10">
     <div class="flex-1 bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold mb-4 text-barangay-main">Barangay Clearance</h2>
-        <p class="text-gray-600 mb-4">Process your barangay clearance requests or approve pending applications.</p>
-
-        <!-- Go to Barangay Clearance Page Button -->
-        <div class="mb-4">
-            <a href="#" class="w-full bg-barangay-main text-white px-4 py-2 rounded hover:bg-barangay-main-light text-center block">Go to Barangay Clearance Page</a>
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-semibold text-barangay-main">Barangay Clearance</h2>
+                <p class="text-gray-600">Process barangay clearance requests</p>
+            </div>
         </div>
 
-        <!-- Pending Clearances List -->
-        <div class="space-y-4">
-            <h3 class="text-xl font-medium text-barangay-main mb-2">Pending Clearances</h3>
-
-            <!-- Example of Pending Clearances -->
-            <div class="flex justify-between items-center border-b border-gray-300 pb-3 mb-3">
-                <span class="text-lg">John Doe</span>
-                <a href="#" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Approve</a>
-            </div>
-
-            <div class="flex justify-between items-center border-b border-gray-300 pb-3 mb-3">
-                <span class="text-lg">Jane Smith</span>
-                <a href="#" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Approve</a>
-            </div>
-
-            <!-- If no pending clearances -->
-            <div class="text-gray-500">No pending clearances at the moment.</div>
-        </div>
-    </div>
-
-    <!-- Health Assistance Panel -->
-    <div class="flex-1 bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold mb-4 text-barangay-main">Health Assistance</h2>
-        <p class="text-gray-600 mb-4">Manage health assistance programs or approve pending applications.</p>
-
-        <!-- Go to Health Assistance Page Button -->
-        <div class="mb-4">
-            <a href="#" class="w-full bg-barangay-main text-white px-4 py-2 rounded hover:bg-barangay-main-light text-center block">Go to Health Assistance Page</a>
-        </div>
-
-        <!-- Pending Health Assistance List -->
-        <div class="space-y-4">
-            <h3 class="text-xl font-medium text-barangay-main mb-2">Pending Health Assistance Applications</h3>
-
-            <!-- Example of Pending Health Assistance -->
-            <div class="flex justify-between items-center border-b border-gray-300 pb-3 mb-3">
-                <span class="text-lg">Alice Brown</span>
-                <a href="#" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Approve</a>
-            </div>
-
-            <div class="flex justify-between items-center border-b border-gray-300 pb-3 mb-3">
-                <span class="text-lg">Bob White</span>
-                <a href="#" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Approve</a>
-            </div>
-
-            <!-- If no pending health applications -->
-            <div class="text-gray-500">No pending health applications at the moment.</div>
+        <!-- Clearances Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Purpose</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date Requested</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($clearances as $clearance)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ $clearance->resident->last_name }},
+                                        {{ $clearance->resident->first_name }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        ID: {{ $clearance->resident->identification_number }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">{{ $clearance->purpose }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $clearance->request_date->format('M d, Y') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {{ $clearance->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                {{ $clearance->status === 'approved' ? 'bg-green-100 text-green-800' : '' }}
+                                {{ $clearance->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
+                                {{ ucfirst($clearance->status) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            @if($clearance->status === 'pending')
+                            <button class="text-white bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md mr-2">
+                                Approve
+                            </button>
+                            <button class="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md">
+                                Reject
+                            </button>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            No clearance requests found
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

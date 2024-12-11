@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <main class="flex w-full mt-16 h-full">
+    <main class="flex w-full mt-16 h-screen">
         @include('layouts.admin-navigation')
         <div class="ml-64 w-full h-full flex justify-center bg-slate-100">
             @yield('content')

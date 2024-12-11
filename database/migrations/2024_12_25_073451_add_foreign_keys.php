@@ -38,6 +38,11 @@ return new class extends Migration
             $table->foreign('household_id')->references('household_id')->on('households');
             $table->foreign('resident_id')->references('resident_id')->on('residents');
         });
+
+        Schema::table('brgy_clearances', function(Blueprint $table) {
+            $table->foreign('resident_id')->references('resident_id')->on('residents');
+            $table->foreign('processed_by')->references('official_id')->on('officials');
+        });
     }
 
     /**

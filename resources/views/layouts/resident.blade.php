@@ -10,7 +10,7 @@
 
 <body class="font-inter">
   
-    <div class="min-h-screen bg-gray-100 mt-10">
+    <div class="min-h-screen bg-slate-50 mt-10">
         @include('layouts.resident-navigation')
 
         <!-- Page Content -->

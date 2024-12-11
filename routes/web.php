@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
+use App\Http\Controllers\BrgyClearanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentProfileController;
@@ -32,6 +33,8 @@ Route::middleware(['auth:resident'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/profile', [BrgyClearanceController::class, 'store'])->name('clearance.request');
 });
 
 //Admin
@@ -59,7 +62,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/events', [EventController::class, 'create'])->name('admin.events');
 
-        Route::get('/services', [ServicesController::class, 'create'])->name('admin.services');
+        Route::get('/services', [BrgyClearanceController::class, 'index'])->name('admin.services');
 
         Route::put('/resident/{relation}/edit-relationship', [ResidentProfileController::class, 'editRelationship'])->name('admin.resident.editRelationship');
         Route::delete('/resident/{relation}/delete-relatinship', [ResidentProfileController::class, 'deleteRelationship'])->name('admin.resident.deleteRelationship');
