@@ -1,21 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="p-7 flex h-[100vh] overflow-hidden"> <!-- Full viewport height with no scroll -->
-    <!-- Left Panel -->
-    <div class="h-full w-1/4 p-4">
-        <!-- Register Button -->
-        <a
-            class="block px-4 py-2 text-center bg-barangay-main text-white rounded hover:bg-barangay-main-light transition duration-200"
-            href="{{ route('admin.resident.register.show') }}">
-            Register Resident
-        </a>
-    </div>
-
+<div class="flex h-screen justify-center pt-12 w-fit"> <!-- Full viewport height with no scroll -->
     <!-- Right Panel -->
-    <div class="bg-white h-full w-3/4 border border-gray-300 rounded shadow flex flex-col">
+    <div class="bg-white h-[800px] w-full border border-gray-300 rounded shadow flex flex-col">
         <!-- Header -->
-        <div class="border-b border-gray-300 p-4">
+        <div class="border-b border-gray-300 p-4 w-[850px]">
             <h2 class="text-lg font-semibold text-gray-700">Residents List</h2>
         </div>
 
@@ -24,7 +14,7 @@
             @forelse ($residents as $resident)
             <a
                 class="block p-4 bg-gray-100 hover:bg-barangay-main hover:text-white rounded transition duration-200"
-                href="{{ route('admin.resident.profile', [$resident->resident_id]) }}">
+                href="{{ route('admin.resident.profile', ['residentId' => $resident->resident_id]) }}">
                 <div class="flex items-center gap-4">
                     <!-- Resident Image -->
                     <img

@@ -17,11 +17,11 @@
         <div class="space-y-3">
             <div class="flex flex-col">
                 <span class="text-gray-500">Last Modified</span>
-                <span class="font-bold">{{ $resident->updated_at }}</span>
+                <span class="font-bold">{{ $residentData->updated_at }}</span>
             </div>
             <div class="flex flex-col">
                 <span class="text-gray-500">Date Created</span>
-                <span class="font-bold">{{ $resident->created_at }}</span>
+                <span class="font-bold">{{ $residentData->created_at }}</span>
             </div>
         </div>
     </div>
@@ -30,12 +30,11 @@
     <div class="flex flex-col w-full">
         @include('admins.resident-profile.personal-information')
         @include('admins.resident-profile.relationships')
-        @include('admins.resident-profile.household')            
+        @include('admins.resident-profile.household')
     </div>
 </div>
 
 <script>
-    
     document.getElementById('household-header').addEventListener('click', function() {
         const content = document.getElementById('household-content');
         content.classList.toggle('hidden');
@@ -57,7 +56,5 @@
             content.classList.add('hidden');
         }
     });
-
-    
 </script>
 @endsection

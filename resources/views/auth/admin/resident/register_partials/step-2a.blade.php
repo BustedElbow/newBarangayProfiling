@@ -8,20 +8,7 @@
         <input type="hidden" id="household_action" name="household_action" value="">
         <input type="hidden" id="existing_household_id" name="existing_household_id">
 
-        <!-- UI for creating a new household -->
-        <div id="createNewHousehold" class="flex flex-col hidden">
-            <input type="text" name="new_household_name" value="{{ session('register_data.last_name') }} Household">
-            <div class="flex gap-2">
-                <span>Current Head: You</span>
-                <span>{{ session('register_data.last_name') }}, {{ session('register_data.first_name') }} {{ session('register_data.middle_name') }}</span>
-            </div>
-            <button onclick="hideUIforNewHousehold()" type="button" class="font-inter text-white py-2 px-3 bg-barangay-main">Cancel</button>
-        </div>
-
-        <div class="flex gap-5">
-            <button type="button" onclick="openExistingHouseholdsModal()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3">Add Existing Household</button>
-            <button type="button" onclick="showUIforNewHousehold()" class="bg-[#4169E1] text-white font-inter w-fit py-2 px-3">Create New Household</button>
-        </div>
+       
     </div>
 </div>
 
@@ -79,65 +66,11 @@
 </div>
 
 <script>
+  
     let familyMemberCounter = 0;
     let currentFamilyMemberIndex = null;
 
-    function loadHouseholds(search = '') {
-        const householdList = document.getElementById('householdList');
-        householdList.innerHTML = '<p>Loading...</p>';
-
-        fetch(`/fetchhouseholds?search=${search}`)
-            .then(response => response.json())
-            .then(data => {
-                householdList.innerHTML = '';
-                if (data.length > 0) {
-                    data.forEach(household => {
-                        const householdDiv = document.createElement('div');
-                        householdDiv.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
-
-                        const householdInfo = document.createElement('span');
-                        const head = household.members[0]?.resident;
-                        const headName = head ? `${head.first_name} ${head.last_name}` : 'No Head Assigned';
-                        householdInfo.textContent = `${household.household_name} (Head: ${headName})`;
-
-                        const joinButton = document.createElement('button');
-                        joinButton.type = 'button';
-                        joinButton.textContent = 'Join';
-                        joinButton.classList.add('bg-barangay-main', 'text-white', 'px-4', 'py-2', 'rounded');
-                        joinButton.onclick = () => {
-                            joinHousehold(household.household_id);
-                        };
-
-                        householdDiv.appendChild(householdInfo);
-                        householdDiv.appendChild(joinButton);
-
-                        householdList.appendChild(householdDiv);
-                    });
-                } else {
-                    householdList.innerHTML = '<p>No households found.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching households:', error);
-                householdList.innerHTML = '<p>Error loading households.</p>';
-            });
-    }
-
-    function searchHousehold() {
-        const searchInput = document.getElementById('householdSearchInput').value;
-        loadHouseholds(searchInput);
-    }
-
-    function joinHousehold(householdId) {
-        // Assign the selected household ID to a hidden input for form submission
-        document.getElementById('household_action').value = 'existing';
-        document.getElementById('existing_household_id').value = householdId;
-
-        // Close the modal
-        closeExistingHouseholdsModal();
-    }
-
-
+    
     function addNewFamilyMemberField() {
         const newMemberDiv = document.createElement('div')
         newMemberDiv.classList.add('flex', 'gap-5', 'family-member')
@@ -262,25 +195,6 @@
     function searchResident() {
         const searchInput = document.getElementById('residentSearchInput').value
         loadResidents(searchInput)
-    }
-
-    function openExistingHouseholdsModal() {
-        document.getElementById('existingHouseholdModal').classList.remove('hidden')
-    }
-
-    function closeExistingHouseholdsModal() {
-        document.getElementById('existingHouseholdModal').classList.add('hidden')
-    }
-
-    function showUIforNewHousehold() {
-        document.getElementById('household_action').value = 'new'
-        document.getElementById('existing_household_id').value = null
-        document.getElementById('createNewHousehold').classList.remove('hidden')
-    }
-
-    function hideUIforNewHousehold() {
-        document.getElementById('household_action').value = ""
-        document.getElementById('createNewHousehold').classList.add('hidden')
     }
 
     function closeConnectResidentModal() {

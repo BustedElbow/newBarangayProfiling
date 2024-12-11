@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\Log;
 
 class ResidentProfileController extends Controller
 {
-    public function create($resident): View {
-        $resident = Resident::with(['relatedTo.Resident', 'householdMember.household.members.resident'])->findOrFail($resident);
+    public function create(int $residentId): View
+    {
+        $residentData = Resident::with([
+            'relatedTo.Resident',
+            'householdMember.household.members.resident'
+        ])->findOrFail($residentId);
+        
 
-        return view('admins.resident-profile', compact('resident'));
+        return view('admins.resident-profile', compact('residentData'));
     }
     
     public function update(Request $request, Resident $resident) {

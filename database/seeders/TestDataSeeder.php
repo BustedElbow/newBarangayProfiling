@@ -36,7 +36,6 @@ class TestDataSeeder extends Seeder
             'name' => "{$resident->first_name} {$resident->last_name}",
             'email' => 'juan@example.com',
             'password' => Hash::make('12345678'),
-            'role' => 'official'
         ]);
 
         // Create Official Record

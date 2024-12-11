@@ -9,41 +9,45 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="flex h-screen font-inter"> 
-
-    @include('layouts.admin-navigation')
-
-    <main class="flex flex-col w-full">
-        <div class="bg-[#f5f5f5] border-[#1e1e1e] border-opacity-25 border-b flex">
-            <div class="flex flex-col p-4 w-full">
-                <h2 class="text-base font-inter uppercase text-barangay-main font-semibold">
-                    @if (Request::is('admin'))
-                    Dashboard
-                    @elseif(Request::is('*admin/residents*'))
-                    Residents
-                    @else
-                    Placeholder
-                    @endif
-                </h2>
-                <h1 class="text-3xl font-raleway text-[#1e1e1e] font-bold">
-                    @if (Request::is('admin'))
-                    Welcome back, User
-                    @elseif (Request::is('admin/residents'))
-                    Barangay Residents
-                    @elseif (Request::is('admin/residents/register'))
-                    Register New Resident
-                    @else
-                    Placeholder
-                    @endif
-                </h1>
+<body class="flex flex-col h-full font-inter">
+    <div class="bg-[#fafafa] border-[#1e1e1e] border-opacity-25 border-b flex justify-between py-2 px-7 fixed top-0 w-full z-50">
+        <div class="flex gap-3 justify-center items-center">
+            <img class="w-[55px] h-[55px]" src="{{ asset('images/barangayEmblem.png') }}" alt="Barangay Emblem">
+            <h2 class="uppercase text-lg font-bold font-raleway text-barangay-main">Barangay Kalinaw</h2>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-3 relative">
+            <div class="flex flex-col gap-0 cursor-pointer" onclick="toggleDropdown()">
+                <span class="font-raleway font-bold text-sm">{{ Auth::user()->name }}</span>
+                <span class="font-inter font-normal text-sm text-[#1e1e1e] text-opacity-60">Barangay Captain</span>
             </div>
-            <div class="overflow-hidden relative w-full">
-                <img class="w-[250px] h-[250px] absolute top-[-70px] right-[-45px] opacity-25" src="{{ asset('images/eagle_mugnanimao.png') }}" alt="">
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu" class="hidden absolute top-full mt-2 bg-white shadow-md border rounded w-auto">
+                <ul class="flex flex-col text-left">
+                    <li>
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 hover:bg-slate-100 text-sm font-medium">Logout</a>
+                    </li>
+                </ul>
+                <!-- Logout Form -->
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    @csrf
+                </form>
             </div>
         </div>
+    </div>
 
-        @yield('content')
+    <main class="flex w-full mt-16 h-full">
+        @include('layouts.admin-navigation')
+        <div class="ml-64 w-full h-full flex justify-center bg-slate-100">
+            @yield('content')
+        </div>
     </main>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu')
+            dropdown.classList.toggle('hidden')
+        }
+    </script>
 </body>
 
 </html>
