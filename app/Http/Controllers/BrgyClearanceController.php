@@ -26,11 +26,17 @@ class BrgyClearanceController extends Controller
 
     public function index()
     {
-        $clearances = BrgyClearance::with('resident')
+        $pendingClearances = BrgyClearance::with('resident')
+        ->where('status', 'pending')
         ->latest('request_date')
         ->get();
 
-        return view('admins.clearances', compact('clearances'));
+        $processedClearances = BrgyClearance::with('resident')
+        ->whereIn('status', ['approved', 'for_claim', 'claimed', 'rejected'])
+        ->latest('request_date')
+        ->get();
+
+        return view('admins.clearances', compact('pendingClearances', 'processedClearances'));
     }
 
     public function approve(BrgyClearance $clearance)
