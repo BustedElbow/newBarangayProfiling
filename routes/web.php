@@ -9,6 +9,7 @@ use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\HouseHoldController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\RegisteredResidentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -46,9 +47,7 @@ Route::prefix('admin')->group(function () {
     //Protected Routes
     Route::middleware(['auth:official'])->group( function () {
 
-        Route::get('/dashboard',function () {
-            return view('admins.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         
         Route::get('/residents',[ResidentController::class, 'create'])->name('admin.residents');
         

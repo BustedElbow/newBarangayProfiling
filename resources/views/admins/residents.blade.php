@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex h-screen justify-center pt-12 w-fit"> <!-- Full viewport height with no scroll -->
     <!-- Right Panel -->
-    <div class="bg-white h-[800px] w-full border border-gray-300 rounded shadow flex flex-col">
+    <div class="bg-white h-[800px] w-full border border-gray-300 rounded-lg flex flex-col">
         <!-- Header -->
         <div class="border-b border-gray-300 p-4 w-[850px]">
             <h2 class="text-lg font-semibold text-gray-700">Residents List</h2>

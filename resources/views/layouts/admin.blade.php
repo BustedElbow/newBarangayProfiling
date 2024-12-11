@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -35,9 +36,9 @@
         </div>
     </div>
 
-    <main class="flex w-full mt-16 h-screen">
+    <main class="flex w-full mt-16 min-h-screen">
         @include('layouts.admin-navigation')
-        <div class="ml-64 w-full h-full flex justify-center bg-slate-100">
+        <div class="ml-64 w-full min-h-screen flex justify-center bg-slate-100">
             @yield('content')
         </div>
     </main>

@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg shadow-md mb-4">
+<div class="bg-[#fafafa] rounded-lg border border-[#1e1e1e] border-opacity-25 mb-4">
     <!-- Accordion Header -->
     <div class="p-4 cursor-pointer flex justify-between items-center" id="personal-info-header">
         <h3 class="text-lg font-semibold">Personal Information</h3>
@@ -85,5 +85,17 @@
             // Submit form
             document.getElementById('update-resident-form').submit();
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get personal info content
+        const personalInfoContent = document.getElementById('personal-info-content');
+
+        // Remove hidden class on load
+        personalInfoContent.classList.remove('hidden');
+
+        // Update arrow icon if needed
+        const arrow = document.querySelector('#personal-info-header svg');
+        arrow.style.transform = 'rotate(180deg)';
     });
 </script>

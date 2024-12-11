@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="p-10 flex justify-center space-x-10">
-    <div class="flex-1 bg-white p-6 rounded-lg shadow-md">
+<div class="p-10 flex justify-center space-x-10 h-fit">
+    <div class="flex-1 bg-[#fafafa] p-6 rounded-lg border border-[#1e1e1e] border-opacity-25">
         <div class="flex justify-between items-center mb-6">
             <div>
                 <h2 class="text-2xl font-semibold text-barangay-main">Barangay Clearance</h2>

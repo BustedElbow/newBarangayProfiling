@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg shadow-md mb-4">
+<div class="bg-white rounded-lg border border-[#1e1e1e] border-opacity-25 mb-4">
     <div class="p-4 cursor-pointer flex justify-between items-center" id="relationships-header">
         <h3 class="text-lg font-semibold">Family Relationships</h3>
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

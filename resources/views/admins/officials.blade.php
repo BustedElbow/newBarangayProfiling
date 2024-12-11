@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="p-10 flex gap-2">
+<div class="p-10 flex gap-2 h-fit">
     <!-- Officials List Section -->
-    <div class="border border-black rounded p-2 flex flex-col gap-1 w-2/3">
+    <div class="border border-[#1e1e1e] border-opacity-25 bg-[#fafafa] rounded p-2 flex flex-col gap-1 w-2/3">
         <div class="flex justify-between items-center mb-2">
             <span class="text-lg font-bold">List of Officials</span>
             <!-- Add Official Button -->

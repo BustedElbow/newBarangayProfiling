@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="flex p-10 space-x-10">
+<div class="flex pt-10 gap-6 w-[60%]">
     <!-- Left Panel -->
-    <div class="flex flex-col border-r border-gray-300 gap-5 pr-10">
+    <div class="flex flex-col gap-5 bg-[#fafafa] h-fit p-5 border border-[#1e1e1e] border-opacity-25 rounded-lg ">
         <!-- Profile Picture -->
         <img class="w-[210px] h-[210px] bg-gray-100 border border-gray-300 rounded" src="" alt="Profile picture">
 
