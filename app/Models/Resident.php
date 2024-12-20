@@ -36,6 +36,7 @@ class Resident extends Model
         'employer',
         'nationality',
         'image',
+        'purok_id',
     ];
 
     public function user()
@@ -71,5 +72,10 @@ class Resident extends Model
     public function clearances()
     {
         return $this->hasMany(BrgyClearance::class, 'resident_id', 'resident_id');
+    }
+
+    public function purok()
+    {
+        return $this->belongsTo(purok::class, 'purok_id', 'purok_id');
     }
 }

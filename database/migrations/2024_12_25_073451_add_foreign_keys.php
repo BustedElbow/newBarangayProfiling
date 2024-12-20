@@ -43,6 +43,10 @@ return new class extends Migration
             $table->foreign('resident_id')->references('resident_id')->on('residents');
             $table->foreign('processed_by')->references('official_id')->on('officials');
         });
+
+        Schema::table('puroks', function(Blueprint $table) {
+            $table->foreign('purok_leader')->references('resident_id')->on('residents');
+        });
     }
 
     /**

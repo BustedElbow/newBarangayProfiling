@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('educational_attainment');
             $table->string('contact_number');
             $table->string('address');
+            $table->unsignedBigInteger('purok_id')->nullable();
             $table->string('nationality');
             $table->timestamps();
         });

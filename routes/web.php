@@ -76,6 +76,12 @@ Route::prefix('admin')->group(function () {
 
         Route::post('/officials', [OfficialController::class, 'store'])->name('admin.officials.store');
 
+        Route::post('/officials/puroks', [OfficialController::class, 'storePurok'])->name('admin.puroks.store');
+        Route::put('/officials/puroks/{purok}', [OfficialController::class, 'updatePurok'])->name('admin.puroks.update');
+
+        Route::post('/clearances/{clearance}/status', [BrgyClearanceController::class, 'updateStatus'])
+        ->name('clearances.updateStatus');
+
         Route::patch('/clearances/{clearance}/approve', [BrgyClearanceController::class, 'approve'])->name('clearances.approve');
         Route::patch('/clearances/{clearance}/for-claim', [BrgyClearanceController::class, 'markForClaim'])->name('clearances.forClaim');
         Route::patch('/clearances/{clearance}/claim', [BrgyClearanceController::class, 'markAsClaimed'])->name('clearances.claim');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BrgyClearance;
 use App\Models\Official;
+use Illuminate\Support\Facades\Log;
 
 class BrgyClearanceController extends Controller
 {
@@ -37,6 +38,35 @@ class BrgyClearanceController extends Controller
         ->get();
 
         return view('admins.clearances', compact('pendingClearances', 'processedClearances'));
+    }
+
+    public function updateStatus(Request $request, BrgyClearance $clearance)
+    {
+        try {
+            $validated = $request->validate([
+                'status' => 'required|in:approve,for_claim,claimed,reject'
+            ]);
+
+            $status = match ($validated['status']) {
+                'approve' => 'approved',
+                'for_claim' => 'for_claim',
+                'claimed' => 'claimed',
+                'reject' => 'rejected',
+            };
+
+            $clearance->update(['status' => $status]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Clearance status updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Clearance update failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update clearance status'
+            ], 500);
+        }
     }
 
     public function approve(BrgyClearance $clearance)

@@ -21,45 +21,48 @@ class AdminAuthenticatedSessionController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        // Attempt authentication
         if (Auth::guard('official')->attempt($credentials)) {
             $request->session()->regenerate();
-
             $user = Auth::guard('official')->user();
 
-            // Debug: Log the authenticated user
-            Log::info('Authenticated User:', $user->toArray());
-
-            // Check if user is linked to a resident
             if ($user->resident) {
                 $resident = $user->resident;
 
-                // Debug: Log associated resident
-                Log::info('Associated Resident:', $resident->toArray());
+                if ($resident->official) {
+                    $official = $resident->official;
 
-                // Check if the resident is linked to an active official record
-                if ($resident->official && $resident->official->is_active) {
-                    // Debug: Log associated official
-                    Log::info('Associated Official:', $resident->official->toArray());
+                    // Check if term has ended
+                    if ($official->isTermEnded()) {
+                        // Update is_active to false
+                        $official->update(['is_active' => false]);
 
-                    return redirect()->route('admin.dashboard');
-                } else {
-                    Auth::guard('official')->logout();
+                        Auth::guard('official')->logout();
+                        return back()->withErrors([
+                            'email' => 'Your term has ended. Access denied.',
+                        ]);
+                    }
 
-                    return back()->withErrors([
-                        'email' => 'This account is not linked to an active official record.',
-                    ]);
+                    // Check if official is active
+                    if ($official->is_active) {
+                        return redirect()->route('admin.dashboard');
+                    }
                 }
-            } else {
-                Auth::guard('official')->logout();
 
+                Auth::guard('official')->logout();
                 return back()->withErrors([
-                    'email' => 'This account is not linked to a resident record.',
+                    'email' => 'This account is not linked to an active official record.',
                 ]);
             }
+
+            Auth::guard('official')->logout();
+            return back()->withErrors([
+                'email' => 'This account is not linked to a resident record.',
+            ]);
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials.']);
+        return back()->withErrors([
+            'email' => 'Invalid credentials.',
+        ]);
     }
 
     // Handle logout requests

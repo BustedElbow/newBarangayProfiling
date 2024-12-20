@@ -20,7 +20,7 @@
             <input id="first_name" name="first_name" type="text"
                 class="bg-gray-100 border border-gray-300 p-2 rounded-md w-full focus:ring focus:ring-barangay-main @error('first_name') border-red-500 @enderror"
                 value="{{ old('first_name', session('register_data.first_name')) }}">
-            <input id="age" class="hidden" type="text" name="age" value="{{ old('age', session('register_data.age')) }}">
+
             @error('first_name')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -58,6 +58,14 @@
             class="bg-gray-100 border border-gray-300 p-2 rounded-md w-full focus:ring focus:ring-barangay-main @error('birthdate') border-red-500 @enderror"
             value="{{ old('birthdate', session('register_data.birthdate')) }}">
         @error('birthdate')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="flex flex-col gap-1 w-full md:w-[48%]">
+        <label for="age" class="font-semibold font-inter">Age</label>
+        <input id="age" class="bg-gray-100 border border-gray-300 p-2 rounded-md w-full focus:ring focus:ring-barangay-main @error('age') border-red-500 @enderror" type="text" name="age" value="{{ old('age', session('register_data.age')) }}">
+        @error('age')
         <span class="text-red-500 text-sm">{{ $message }}</span>
         @enderror
     </div>
@@ -113,6 +121,23 @@
             class="bg-gray-100 border border-gray-300 p-2 rounded-md w-full focus:ring focus:ring-barangay-main @error('address') border-red-500 @enderror"
             value="{{ old('address', session('register_data.address')) }}">
         @error('address')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="flex flex-col gap-1 w-full md:w-[48%]">
+        <label for="purok_id" class="font-semibold font-inter">Purok</label>
+        <select id="purok_id" name="purok_id"
+            class="bg-gray-100 border border-gray-300 p-2 rounded-md w-full focus:ring focus:ring-barangay-main @error('purok_id') border-red-500 @enderror">
+            <option value="" disabled selected>Select Purok</option>
+            @foreach($puroks as $purok)
+            <option value="{{ $purok->purok_id }}"
+                {{ old('purok_id', session('register_data.purok_id')) == $purok->purok_id ? 'selected' : '' }}>
+                {{ $purok->purok_name }}
+            </option>
+            @endforeach
+        </select>
+        @error('purok_id')
         <span class="text-red-500 text-sm">{{ $message }}</span>
         @enderror
     </div>

@@ -9,6 +9,7 @@ use App\Models\Resident;
 use App\Models\User;
 use App\Models\BloodRelation;
 use App\Models\Household;
+use App\Models\purok;
 use App\Models\HouseholdMember;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,7 @@ class RegisteredResidentController extends Controller
 {
     
     public function create(Request $request){
+        $puroks = purok::all();
         $currentStep = session('current_step', 1);
         $householdDetails = null;
         if (session('register_data.household_action') === 'existing') {
@@ -25,7 +27,7 @@ class RegisteredResidentController extends Controller
             $householdDetails = Household::with('members')->find($householdId);
         }
 
-        return view('auth.admin.resident.register', compact('currentStep', 'householdDetails'));
+        return view('auth.admin.resident.register', compact('currentStep', 'householdDetails', 'puroks'));
     }
 
     public function store(Request $request)
@@ -53,6 +55,7 @@ class RegisteredResidentController extends Controller
                 'new_household_name' => 'required_if:household_action,new',
                 'existing_household_id' => 'required_if:household_action,existing',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'purok_id' => 'required|exists:puroks,purok_id',
             ]);
 
             if ($request->hasFile('image')) {
@@ -83,6 +86,7 @@ class RegisteredResidentController extends Controller
                 'occupation' => $validated['occupation'],
                 'employer' => $validated['employer'],
                 'educational_attainment' => $validated['educational_attainment'],
+                'purok_id' => $validated['purok_id'],
             ]);
 
             Log::info('Resident created:', $resident->toArray());

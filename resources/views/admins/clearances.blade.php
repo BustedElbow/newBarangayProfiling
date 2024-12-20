@@ -35,14 +35,15 @@
                             {{ $clearance->request_date->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button onclick="approveClearance('{{ $clearance->clearance_id }}')"
-                                class="text-white bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md mr-2">
-                                Approve
-                            </button>
-                            <button onclick="rejectClearance('{{ $clearance->clearance_id }}')"
-                                class="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md">
-                                Reject
-                            </button>
+                            <select
+                                onchange="updateClearanceStatus('{{ $clearance->clearance_id }}', this.value)"
+                                class="block w-40 px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                <option value="" disabled selected>Select Action</option>
+                                <option value="approve" class="text-green-600">Approve</option>
+                                <option value="for_claim" class="text-blue-600">For Claim</option>
+                                <option value="claimed" class="text-purple-600">Claimed</option>
+                                <option value="reject" class="text-red-600">Reject</option>
+                            </select>
                         </td>
                     </tr>
                     @empty
@@ -131,6 +132,36 @@
 </div>
 
 <script>
+    function updateClearanceStatus(clearanceId, status) {
+        if (!confirm('Are you sure you want to update this clearance status?')) {
+            return;
+        }
+
+        fetch(`/admin/clearances/${clearanceId}/status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: status
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update status');
+            });
+    }
+
     function approveClearance(id) {
         if (!confirm('Are you sure you want to approve this clearance?')) return;
 
